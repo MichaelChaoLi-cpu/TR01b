@@ -1,6 +1,6 @@
 outs:
-- md5: a1866d1be5909d50e2b3a63dc46af405.dir
-  size: 180
-  nfiles: 1
+- md5: 477a6e8c0cf4cfeae5761d8846be0ddc.dir
+  size: 177884
+  nfiles: 2
   hash: md5
   path: framelog

@@ -1,0 +1,2163 @@
+doc_type: actionbrief
+version: 0.1.0
+datasetDictionary:
+  road_products:
+    datasetSourceName: KSJ historical road mesh products and 2024 road centerlines
+    datasetDescription: Source-defined road provision, including historical supplied density and recent ordinary-centerline
+      length.
+    datasetAttribute: table
+    datasetProvider: Ministry of Land, Infrastructure, Transport and Tourism, Japan; National Land Numerical Information
+      (KSJ).
+    datasetGenerationInfo: Official road mesh attributes for historical snapshots and selected ordinary-road centerline
+      geometry for 2024.
+    datasetPeriod: 2002, 2003, 2004, 2010 and 2024
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: Historical standard approximately 1 km mesh; recent lines aggregated to the same mesh.
+    datasetTemporalResolution: Irregular source snapshots; no annual reconstruction.
+    datasetPreprocessingInfo: Supplied normalized metres per square kilometre converted once to km/km2; recent length
+      divided by full projected mesh area. Approved source-unlisted/unknown density-only zeros retain flags; original
+      length and area missingness is preserved. The documented 2010 length repair does not change supplied density.
+      Cross-period source equivalence remains unresolved.
+    retainedPaths:
+    - data/exp/data-preprocessing/national/decisions.json
+    - data/exp/data-preprocessing/road-density-zero/decisions.json
+    - data/processed/national/road_density_zero/roads_2024_preprocessed.parquet
+  census_population:
+    datasetSourceName: Population Census standard mesh totals
+    datasetDescription: Total residents of both sexes and all ages at the actual census year.
+    datasetAttribute: table
+    datasetProvider: Statistics Bureau of Japan, Ministry of Internal Affairs and Communications; e-Stat statistical
+      GIS.
+    datasetGenerationInfo: Official Population Census mesh tabulations.
+    datasetPeriod: 2000, 2005, 2010 and 2020; matched as 2000, 2005, 2005, 2010, 2020
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: Standard approximately 1 km statistical mesh
+    datasetTemporalResolution: Five-year census snapshots; 2005 is used twice.
+    datasetPreprocessingInfo: Absent mesh records within verified complete census archives are structural zeros;
+      entire archive gaps remain missing. Preserve actual years, disclosure references and census offsets; no statistical
+      imputation.
+    retainedPaths:
+    - data/exp/data-preprocessing/population-zero-correction/decisions.json
+    - data/processed/national/five_period/population_2020_preprocessed.parquet
+  nighttime_light:
+    datasetSourceName: The global NPP-VIIRS-like nighttime light data (Version 2) for 1992-2025
+    datasetDescription: Harmonized VIIRS-like annual radiance used as a proxy for broader economic activity.
+    datasetAttribute: table
+    datasetProvider: Zuoqi Chen, Bailang Yu and coauthors; published through Harvard Dataverse, DOI 10.7910/DVN/YGIVCD.
+    datasetGenerationInfo: Research-derived global VIIRS-like nighttime-light raster product, Version 2; acquired
+      dataset edition 10.1.
+    datasetPeriod: Product 1992-2025; study uses 2002, 2003, 2004, 2010 and 2024
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: Native WGS84 raster spacing approximately 0.0044916 degrees; valid pixels aggregated
+      to standard 1 km meshes.
+    datasetTemporalResolution: Annual rasters; selected irregular road years.
+    datasetPreprocessingInfo: Use year-specific georeferencing and valid pixel/mesh intersection-area-weighted mean.
+      Retain true zeros, exclude declared nodata; no logarithm, clipping, interpolation or land mask. Radiance is
+      not calibrated GDP and zero is not measured zero economic activity.
+    retainedPaths:
+    - data/exp/data-organization/source-metadata/2026-10-08/datacite.json
+    - data/exp/data-organization/tables/nighttime_raster_metadata.json
+    - data/processed/national/five_period/lights_2024_preprocessed.parquet
+  land_cover:
+    datasetSourceName: MODIS MCD12Q1 Collection 6.1 LC_Type2 UMD classification
+    datasetDescription: Annual six-group land-cover area shares and latest dominant land context.
+    datasetAttribute: table
+    datasetProvider: NASA MODIS land-cover product, distributed through NASA data services; retained catalogue and
+      quality metadata.
+    datasetGenerationInfo: Annual satellite land-cover classification; LC_Type2 uses the University of Maryland
+      legend.
+    datasetPeriod: 2002, 2003, 2004, 2010 and 2024
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: Nominal 500 m MODIS pixels; geometric intersections with full 1 km mesh footprints.
+    datasetTemporalResolution: Annual land-cover snapshots matched to each study period.
+    datasetPreprocessingInfo: Forest 1-5, Shrublands and Grasslands 6-10, Cropland 12, Urban 13, Water 0, Barren
+      15 including snow/ice. Accept the approved source quality states and mask-identified water. Exclude unresolved
+      land; preserve incomplete coverage without renormalization. Water is the regression reference. The unpublished
+      tile leaves four source-unavailable cohort meshes.
+    retainedPaths:
+    - data/exp/data-preprocessing/modis-umd/decisions.json
+    - data/exp/data-preprocessing/modis-umd/grouping_decisions.json
+    - data/processed/national/modis_umd/modis_umd_land_cover_mesh_preprocessed.parquet
+    - data/processed/national/modis_umd/mismatch_context_2024_preprocessed.parquet
+  static_facilities:
+    datasetSourceName: Selected KSJ station, airport, school, medical, logistics and visitor inventories
+    datasetDescription: Six selected facility controls and four source-location categories used in the spatial foundation
+      figure.
+    datasetAttribute: table
+    datasetProvider: Ministry of Land, Infrastructure, Transport and Tourism, Japan; National Land Numerical Information
+      (KSJ).
+    datasetGenerationInfo: Official feature inventories, with approved station grouping, passenger-terminal selection
+      and category-specific duplicate rules.
+    datasetPeriod: Railway 2024; airport 2021; school 2023; medical 2020; logistics 2013; visitor/event 2014
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: Original source features; counts per 1 km mesh and geodesic distances from mesh centroids
+      in km.
+    datasetTemporalResolution: One selected edition per category, replicated unchanged across all five periods under
+      the approved static assumption.
+    datasetPreprocessingInfo: Retain selected totals, exact deduplication rules, observed-location coverage and
+      source provenance. Use six focused controls; do not add component counts, bus candidates or the eighteen supplementary
+      inventories to the confirmed equation. Point-map coordinates are geographic references, not additional predictors.
+      The source snapshots do not reconstruct historical openings.
+    retainedPaths:
+    - data/exp/data-preprocessing/static-facilities/decisions.json
+    - data/exp/data-preprocessing/static-facilities/source_inventory_validation.json
+    - data/processed/national/static_facilities/static_facility_mesh_preprocessed.parquet
+  administrative_geography:
+    datasetSourceName: Frozen KSJ administrative boundary and study mesh assignments
+    datasetDescription: Nine transportation-statistics regions, forty-seven prefectures and municipal financial-government
+      linkage.
+    datasetAttribute: table
+    datasetProvider: MLIT National Land Numerical Information administrative polygons; project-derived allocation
+      using verified government codes.
+    datasetGenerationInfo: Greatest positive projected land-overlap allocation, held fixed across periods; designated-city
+      wards consolidate to financial parent.
+    datasetPeriod: Frozen boundary reference 2024-01-01; 2021 Shizuoka reference for verified historical ward-code
+      linkage.
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: Administrative polygons intersected with 1 km mesh footprints
+    datasetTemporalResolution: Fixed spatial classification throughout the five-period study.
+    datasetPreprocessingInfo: Retain islands, nineteen reviewed no-overlap exceptions and cross-boundary flags.
+      Municipality allocation is restricted to the frozen prefecture. Keep 320 unlinked meshes missing; this is
+      territorial allocation, not road ownership or exact clipping.
+    retainedPaths:
+    - data/exp/data-preprocessing/regional/reference/manifest.json
+    - data/processed/national/municipality_mismatch_trial/mesh_municipality_reference_preprocessed.parquet
+  traffic_survey:
+    datasetSourceName: 2021 Road Traffic Census territorial survey summaries
+    datasetDescription: Published 24-hour vehicle volumes averaged over positive-length surveyed major-road segments
+      within government territories.
+    datasetAttribute: table
+    datasetProvider: Ministry of Land, Infrastructure, Transport and Tourism, Japan; official Road Traffic Census
+      sources.
+    datasetGenerationInfo: Official basic survey segments and published daily vehicle volumes; retained source-manager
+      and road-type references.
+    datasetPeriod: '2021'
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: Survey segments aggregated by source municipality codes to the financial-government
+      crosswalk.
+    datasetTemporalResolution: Single observed cross-section; not replicated into the radiance panel.
+    datasetPreprocessingInfo: Length-weight available volumes using basic-segment lengths and verified code linkage;
+      retain estimated-volume flags and missing outcomes. Most ordinary municipal roads are outside the survey.
+      Seven government outcomes remain missing.
+    retainedPaths:
+    - data/processed/national/municipality_mismatch_trial/municipal_traffic_reference_preprocessed.parquet
+    - data/exp/data-preprocessing/municipality-mismatch-trial/decisions.json
+  municipal_finance:
+    datasetSourceName: Local Public Finance Survey municipal fiscal accounts
+    datasetDescription: Realized road-plus-bridge maintenance, expenditure, standard fiscal scale, revenue and need
+      for individual financial governments.
+    datasetAttribute: table
+    datasetProvider: Ministry of Internal Affairs and Communications, Japan; Local Public Finance Survey distributed
+      through e-Stat.
+    datasetGenerationInfo: Official financial accounts and source templates, with verified purpose rows, fiscal-year
+      labels and thousand-JPY units.
+    datasetPeriod: Actual FY2023, despite the source catalogue's 2024 label
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: 1,741 individual municipal financial governments
+    datasetTemporalResolution: Single fiscal-year cross-section; not repeated into the five-period radiance models.
+    datasetPreprocessingInfo: Combine disjoint road and bridge maintenance child rows; exclude capital construction
+      and entrusted-work columns. Calculate maintenance/expenditure, maintenance/fiscal-scale and single-year standard
+      revenue/need. Do not decode or substitute the three-year strength index. These are realized spending ratios,
+      not maintenance requirements.
+    retainedPaths:
+    - data/processed/national/municipality_mismatch_trial/municipal_fiscal_reference_preprocessed.parquet
+    - data/exp/municipality-mismatch-trial/source_inventory.csv
+  national_model_panel:
+    datasetSourceName: Validated UMD common-cohort analytical panel
+    datasetDescription: Source-linked mesh-period data underlying the same-sample baseline, extended administrative
+      and local comparisons.
+    datasetAttribute: table
+    datasetProvider: Project construction from the documented official and satellite source families.
+    datasetGenerationInfo: Mesh-key joins, approved source coding, geographic assignment and complete focused-control
+      selection.
+    datasetPeriod: Road/light/land 2002, 2003, 2004, 2010, 2024; population 2000, 2005, 2005, 2010, 2020
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: 383,386 approximately 1 km meshes; 1,916,930 records
+    datasetTemporalResolution: Five irregular snapshots; static facility replication.
+    datasetPreprocessingInfo: Processed candidate data contain 383,390 meshes and twenty land-cover-unavailable
+      records. The frozen analytical snapshot excludes only those four meshes from the same-sample comparison. Full
+      source-derived panel retains 4,864,000 records. Original units, valid zeros and source-year references remain;
+      no fixed effects or analytical logarithms.
+    retainedPaths:
+    - data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    - data/exp/umd-four-layer/inputs/model_panel.parquet
+    - data/exp/umd-four-layer/execution_contract.json
+  mismatch_screen:
+    datasetSourceName: Validated 2024 UMD comparable-context screen
+    datasetDescription: Nullable relative high-road/low-radiance candidate status and land-context summaries for
+      the current mesh cohort.
+    datasetAttribute: table
+    datasetProvider: Project-derived descriptive screen using the validated national model panel and annual UMD
+      shares.
+    datasetGenerationInfo: Preselected peers defined by region, population band, dominant land context, selected
+      facility presence and railway proximity.
+    datasetPeriod: Road/light/land 2024; population 2020
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: 383,386 meshes; 376,219 supported comparisons; 66,097 candidates
+    datasetTemporalResolution: Latest-period cross-section; distinct from the local coefficient surface.
+    datasetPreprocessingInfo: Require at least thirty peer meshes and positive peer maximum radiance. Positive road
+      density strictly above peer Q75 and radiance at or below peer Q25 defines a candidate; use linear quartiles.
+      Keep 7,167 unsupported indicators missing. Zero radiance is retained. This screen does not classify confirmed
+      excessive stock, economic inactivity or unused roads.
+    retainedPaths:
+    - data/exp/umd-mismatch-screen/mesh_screen_2024.parquet
+    - data/processed/national/modis_umd/mismatch_context_2024_preprocessed.parquet
+    - data/exp/umd-mismatch-screen/validation.json
+  municipal_evidence:
+    datasetSourceName: Validated UMD municipal mismatch, traffic and fiscal evidence
+    datasetDescription: Municipal and land-context candidate fractions linked to existing traffic and fiscal outcomes.
+    datasetAttribute: table
+    datasetProvider: Project-derived reconciliation of UMD screening, frozen government linkage and verified official
+      outcomes.
+    datasetGenerationInfo: Aggregate supported and candidate mesh counts to financial governments and compare pairwise
+      available outcomes.
+    datasetPeriod: Road/light/land 2024; population 2020; traffic 2021; actual fiscal year 2023
+    datasetScale: Japan nationwide source scope; study results are conditional on the documented analytical cohort.
+    datasetSpatialResolution: 1,741 governments; 1,734 usable traffic outcomes; 383,386-mesh jurisdiction ledger
+    datasetTemporalResolution: Linked cross-section with noncontemporaneous source dates.
+    datasetPreprocessingInfo: 66,059 candidates link to governments and 38 remain unlinked; preserve the full ledger.
+      Context-specific fractions pair with whole-government outcomes. Keep zero-denominator contexts unavailable.
+      Traffic and own-government spending are not matched by road ownership; no causal fiscal model is estimated.
+    retainedPaths:
+    - data/exp/umd-municipal-context/municipal_evidence_2024.parquet
+    - data/exp/umd-municipal-context/municipal_mesh_ledger_2024.parquet
+    - data/exp/umd-municipal-context/municipal_context_rank_correlations.csv
+    - data/exp/umd-municipal-context/validation.json
+variableDictionary:
+  nighttime_radiance:
+    variableNameInDataset: Nighttime Radiance
+    variableNameInArticle: Nighttime Radiance
+    variableAttribute: continuous
+    variableUnit: nW/cm2/sr
+    variableDescription: Area-weighted mean source radiance over valid pixel intersections, in nW/cm2/sr; proxy
+      for broader economic activity. Retain valid source zeros; exclude declared nodata during existing construction.
+      No new filling, clipping or logarithm.
+    variableSource: nighttime_light
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: outcome
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/lights_2002_confirmed_input.parquet
+      processedPath: data/processed/pilot/lights_2002_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/lights_2003_confirmed_input.parquet
+      processedPath: data/processed/pilot/lights_2003_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/lights_2004_confirmed_input.parquet
+      processedPath: data/processed/pilot/lights_2004_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/lights_2010_confirmed_input.parquet
+      processedPath: data/processed/pilot/lights_2010_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/lights_2024_confirmed_input.parquet
+      processedPath: data/processed/pilot/lights_2024_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2002_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2002_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2003_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2003_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2004_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2004_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2010_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2010_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2002_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2002_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2003_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2003_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2004_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2004_preprocessed.parquet
+      originalName: nighttime_radiance
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/lights_2010_confirmed_input.parquet
+      processedPath: data/processed/national/lights_2010_preprocessed.parquet
+      originalName: nighttime_radiance
+  road_length_density:
+    variableNameInDataset: Road Length Density
+    variableNameInArticle: Road Length Density
+    variableAttribute: continuous
+    variableUnit: km/km2
+    variableDescription: Source-defined road length per full mesh area, in km/km2; historical supplied densities
+      and recent centerline-derived densities retain distinct provenance. Reuse accepted density-only zero coding
+      for source-unlisted/unknown values and preserve its source-status flags. No source rescaling.
+    variableSource: road_products
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: main explanatory
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/roads_2002_confirmed_input.parquet
+      processedPath: data/processed/pilot/roads_2002_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/roads_2003_confirmed_input.parquet
+      processedPath: data/processed/pilot/roads_2003_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/roads_2004_confirmed_input.parquet
+      processedPath: data/processed/pilot/roads_2004_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/roads_2010_confirmed_input.parquet
+      processedPath: data/processed/pilot/roads_2010_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/roads_2024_confirmed_input.parquet
+      processedPath: data/processed/pilot/roads_2024_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2002_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2002_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2003_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2003_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2004_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2004_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2010_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2010_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2002_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2002_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2003_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2003_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2004_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2004_preprocessed.parquet
+      originalName: road_length_density
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/roads_2010_confirmed_input.parquet
+      processedPath: data/processed/national/roads_2010_preprocessed.parquet
+      originalName: road_length_density
+  population:
+    variableNameInDataset: Population
+    variableNameInArticle: Population
+    variableAttribute: count
+    variableUnit: persons/mesh
+    variableDescription: Published mesh total residents at the actual matched census year, with archive-covered
+      source-unlisted meshes retaining accepted structural zeros. Retain accepted structural zeros, archive-coverage
+      provenance and actual census offsets. No statistical imputation.
+    variableSource: census_population
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2000, 2005 (twice), 2010, 2020
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/population_2000_confirmed_input.parquet
+      processedPath: data/processed/pilot/population_2000_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/population_2005_confirmed_input.parquet
+      processedPath: data/processed/pilot/population_2005_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/population_2010_confirmed_input.parquet
+      processedPath: data/processed/pilot/population_2010_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/pilot/confirmed-inputs/population_2020_confirmed_input.parquet
+      processedPath: data/processed/pilot/population_2020_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/population_2000_confirmed_input.parquet
+      processedPath: data/processed/national/population_2000_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/population_2005_confirmed_input.parquet
+      processedPath: data/processed/national/population_2005_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/population_2010_confirmed_input.parquet
+      processedPath: data/processed/national/population_2010_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/population_2000_confirmed_input.parquet
+      processedPath: data/processed/national/population_2000_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/population_2005_confirmed_input.parquet
+      processedPath: data/processed/national/population_2005_preprocessed.parquet
+      originalName: population
+    - decisionsPath: data/exp/data-preprocessing/national/decisions.json
+      confirmedInput: data/exp/data-preprocessing/national/confirmed-inputs/population_2010_confirmed_input.parquet
+      processedPath: data/processed/national/population_2010_preprocessed.parquet
+      originalName: population
+  urban_land_cover_share:
+    variableNameInDataset: Urban Land Cover Share
+    variableNameInArticle: Urban Land Cover Share
+    variableAttribute: continuous
+    variableUnit: area proportion
+    variableDescription: Annual full-mesh-area share of the confirmed urban land-cover category; partial coverage
+      remains flagged and is not normalized. Reuse accepted annual class aggregation and quality flags; no rescaling
+      or filling.
+    variableSource: land_cover
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2002_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2002_preprocessed.parquet
+      originalName: Urban Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2003_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2003_preprocessed.parquet
+      originalName: Urban Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2004_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2004_preprocessed.parquet
+      originalName: Urban Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2010_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2010_preprocessed.parquet
+      originalName: Urban Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2024_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2024_preprocessed.parquet
+      originalName: Urban Land Cover Share
+  forest_land_cover_share:
+    variableNameInDataset: Forest Land Cover Share
+    variableNameInArticle: Forest Land Cover Share
+    variableAttribute: continuous
+    variableUnit: area proportion
+    variableDescription: Annual full-mesh-area share of the confirmed forest land-cover category; partial coverage
+      remains flagged and is not normalized. Reuse accepted annual class aggregation and quality flags; no rescaling
+      or filling.
+    variableSource: land_cover
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2002_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2002_preprocessed.parquet
+      originalName: Forest Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2003_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2003_preprocessed.parquet
+      originalName: Forest Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2004_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2004_preprocessed.parquet
+      originalName: Forest Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2010_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2010_preprocessed.parquet
+      originalName: Forest Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2024_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2024_preprocessed.parquet
+      originalName: Forest Land Cover Share
+  cropland_land_cover_share:
+    variableNameInDataset: Cropland Land Cover Share
+    variableNameInArticle: Cropland Land Cover Share
+    variableAttribute: continuous
+    variableUnit: area proportion
+    variableDescription: Annual full-mesh-area share of the confirmed cropland land-cover category; partial coverage
+      remains flagged and is not normalized. Reuse accepted annual class aggregation and quality flags; no rescaling
+      or filling.
+    variableSource: land_cover
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2002_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2002_preprocessed.parquet
+      originalName: Cropland Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2003_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2003_preprocessed.parquet
+      originalName: Cropland Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2004_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2004_preprocessed.parquet
+      originalName: Cropland Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2010_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2010_preprocessed.parquet
+      originalName: Cropland Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2024_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2024_preprocessed.parquet
+      originalName: Cropland Land Cover Share
+  shrublands_and_grasslands:
+    variableNameInDataset: Shrublands and Grasslands
+    variableNameInArticle: Shrublands and Grasslands
+    variableAttribute: continuous
+    variableUnit: area proportion
+    variableDescription: Annual full-mesh-area share of the confirmed UMD classes 6-10; partial coverage remains
+      flagged and is not normalized. Reuse accepted annual class aggregation and quality flags; no rescaling or
+      filling.
+    variableSource: land_cover
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2002_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2002_preprocessed.parquet
+      originalName: Shrublands and Grasslands
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2003_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2003_preprocessed.parquet
+      originalName: Shrublands and Grasslands
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2004_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2004_preprocessed.parquet
+      originalName: Shrublands and Grasslands
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2010_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2010_preprocessed.parquet
+      originalName: Shrublands and Grasslands
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2024_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2024_preprocessed.parquet
+      originalName: Shrublands and Grasslands
+  water_land_cover_share:
+    variableNameInDataset: Water Land Cover Share
+    variableNameInArticle: Water Land Cover Share
+    variableAttribute: continuous
+    variableUnit: area proportion
+    variableDescription: Annual full-mesh-area share of the confirmed water land-cover category; partial coverage
+      remains flagged and is not normalized. Reuse accepted annual class aggregation and quality flags; no rescaling
+      or filling.
+    variableSource: land_cover
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: omitted reference
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2002_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2002_preprocessed.parquet
+      originalName: Water Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2003_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2003_preprocessed.parquet
+      originalName: Water Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2004_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2004_preprocessed.parquet
+      originalName: Water Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2010_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2010_preprocessed.parquet
+      originalName: Water Land Cover Share
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2024_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2024_preprocessed.parquet
+      originalName: Water Land Cover Share
+  distance_to_railway_station:
+    variableNameInDataset: Distance to Railway Station
+    variableNameInArticle: Distance to Railway Station
+    variableAttribute: continuous
+    variableUnit: km
+    variableDescription: Existing distance in kilometres to selected passenger-station representatives. Reuse the
+      approved static source edition across five periods, without reconstructing historical facility openings or
+      adding category components.
+    variableSource: static_facilities
+    observationNumber: 383386
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh (static)
+    sourcePeriod: 2024 (static)
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/static-facilities/decisions.json
+      confirmedInput: data/exp/data-preprocessing/static-facilities/confirmed-inputs/railway_confirmed_input.parquet
+      processedPath: data/processed/national/static_facilities/railway_preprocessed.parquet
+      originalName: Distance to Railway Station
+  distance_to_passenger_airport:
+    variableNameInDataset: Distance to Passenger Airport
+    variableNameInArticle: Distance to Passenger Airport
+    variableAttribute: continuous
+    variableUnit: km
+    variableDescription: Existing distance in kilometres to selected passenger-airport representatives. Reuse the
+      approved static source edition across five periods, without reconstructing historical facility openings or
+      adding category components.
+    variableSource: static_facilities
+    observationNumber: 383386
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh (static)
+    sourcePeriod: 2021 (static)
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/static-facilities/decisions.json
+      confirmedInput: data/exp/data-preprocessing/static-facilities/confirmed-inputs/airports_confirmed_input.parquet
+      processedPath: data/processed/national/static_facilities/airports_preprocessed.parquet
+      originalName: Distance to Passenger Airport
+  school_facility_count:
+    variableNameInDataset: School Facility Count
+    variableNameInArticle: School Facility Count
+    variableAttribute: count
+    variableUnit: facilities/mesh
+    variableDescription: Existing count of selected school records or campuses in the mesh. Reuse the approved static
+      source edition across five periods, without reconstructing historical facility openings or adding category
+      components.
+    variableSource: static_facilities
+    observationNumber: 383386
+    dtype: int32
+    variableRole: control
+    statisticalUnit: Mesh (static)
+    sourcePeriod: 2023 (static)
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/static-facilities/decisions.json
+      confirmedInput: data/exp/data-preprocessing/static-facilities/confirmed-inputs/schools_confirmed_input.parquet
+      processedPath: data/processed/national/static_facilities/schools_preprocessed.parquet
+      originalName: School Facility Count
+  medical_facility_count:
+    variableNameInDataset: Medical Facility Count
+    variableNameInArticle: Medical Facility Count
+    variableAttribute: count
+    variableUnit: facilities/mesh
+    variableDescription: Existing count of selected medical facilities in the mesh. Reuse the approved static source
+      edition across five periods, without reconstructing historical facility openings or adding category components.
+    variableSource: static_facilities
+    observationNumber: 383386
+    dtype: int32
+    variableRole: control
+    statisticalUnit: Mesh (static)
+    sourcePeriod: 2020 (static)
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/static-facilities/decisions.json
+      confirmedInput: data/exp/data-preprocessing/static-facilities/confirmed-inputs/medical_confirmed_input.parquet
+      processedPath: data/processed/national/static_facilities/medical_preprocessed.parquet
+      originalName: Medical Facility Count
+  logistics_facility_count:
+    variableNameInDataset: Logistics Facility Count
+    variableNameInArticle: Logistics Facility Count
+    variableAttribute: count
+    variableUnit: facilities/mesh
+    variableDescription: Existing count of selected freight-related facilities in the mesh. Reuse the approved static
+      source edition across five periods, without reconstructing historical facility openings or adding category
+      components.
+    variableSource: static_facilities
+    observationNumber: 383386
+    dtype: int32
+    variableRole: control
+    statisticalUnit: Mesh (static)
+    sourcePeriod: 2013 (static)
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/static-facilities/decisions.json
+      confirmedInput: data/exp/data-preprocessing/static-facilities/confirmed-inputs/logistics_confirmed_input.parquet
+      processedPath: data/processed/national/static_facilities/logistics_preprocessed.parquet
+      originalName: Logistics Facility Count
+  visitor_and_event_facility_count:
+    variableNameInDataset: Visitor and Event Facility Count
+    variableNameInArticle: Visitor and Event Facility Count
+    variableAttribute: count
+    variableUnit: facilities/mesh
+    variableDescription: Existing count of selected visitor and event facilities in the mesh. Reuse the approved
+      static source edition across five periods, without reconstructing historical facility openings or adding category
+      components.
+    variableSource: static_facilities
+    observationNumber: 383386
+    dtype: int32
+    variableRole: control
+    statisticalUnit: Mesh (static)
+    sourcePeriod: 2014 (static)
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/static-facilities/decisions.json
+      confirmedInput: data/exp/data-preprocessing/static-facilities/confirmed-inputs/visitor_facilities_confirmed_input.parquet
+      processedPath: data/processed/national/static_facilities/visitor_facilities_preprocessed.parquet
+      originalName: Visitor and Event Facility Count
+  barren:
+    variableNameInDataset: Barren
+    variableNameInArticle: Barren
+    variableAttribute: continuous
+    variableUnit: area proportion
+    variableDescription: Annual full-mesh-area share of the confirmed UMD class 15; partial coverage remains flagged
+      and is not normalized. Reuse accepted annual class aggregation and mask-identified water; retain Barren and
+      incomplete coverage. Water Land Cover Share is omitted from the focused equation.
+    variableSource: land_cover
+    observationNumber: 1916930
+    dtype: float64
+    variableRole: control
+    statisticalUnit: Mesh-period
+    sourcePeriod: 2002, 2003, 2004, 2010, 2024
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2002_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2002_preprocessed.parquet
+      originalName: Barren
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2003_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2003_preprocessed.parquet
+      originalName: Barren
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2004_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2004_preprocessed.parquet
+      originalName: Barren
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2010_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2010_preprocessed.parquet
+      originalName: Barren
+    - decisionsPath: data/exp/data-preprocessing/modis-umd/decisions.json
+      confirmedInput: data/exp/data-preprocessing/modis-umd/confirmed-inputs/modis_umd_2024_mesh.parquet
+      processedPath: data/processed/national/modis_umd/modis_umd_land_cover_2024_preprocessed.parquet
+      originalName: Barren
+  potential_mismatch_candidate:
+    variableNameInDataset: Potential Mismatch Candidate
+    variableNameInArticle: Potential Mismatch Candidate
+    variableAttribute: boolean
+    variableUnit: 0/1 indicator
+    variableDescription: True for supported meshes with positive Road Length Density above the peer upper quartile
+      and Nighttime Radiance at or below the peer lower quartile; unavailable screening remains missing. Recompute
+      2024 peer quartiles using confirmed UMD Land Context; keep all other peer dimensions, at least thirty distinct
+      meshes, positive peer maximum radiance, linear quartiles and original strict road/inclusive radiance comparisons.
+      No filling.
+    variableSource: mismatch_screen
+    observationNumber: 376219
+    dtype: boolean
+    variableRole: descriptive mismatch indicator
+    statisticalUnit: Mesh
+    sourcePeriod: 2024 screen
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/exp/umd-mismatch-screen/mesh_screen_2024.parquet
+    sourceLineage: []
+  land_context:
+    variableNameInDataset: Land Context
+    variableNameInArticle: Land Context
+    variableAttribute: categorical
+    variableUnit: category
+    variableDescription: Dominant 2024 full-mesh UMD share among Urban, Forest, Cropland, Water, Shrublands and
+      Grasslands, and Barren. Retain tied largest shares within absolute tolerance 1e-12 as Tied dominant classes;
+      Incomplete coverage overrides dominance. Do not normalize shares. Retain all observed contexts. Historical
+      IGBP municipal contexts remain separately identified.
+    variableSource: land_cover
+    observationNumber: 383386
+    dtype: str
+    variableRole: descriptive context
+    statisticalUnit: Mesh
+    sourcePeriod: 2024 UMD
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/processed/national/modis_umd/mismatch_context_2024_preprocessed.parquet
+    sourceLineage: []
+  candidate_fraction_of_supported_meshes:
+    variableNameInDataset: Candidate Fraction of Supported Meshes
+    variableNameInArticle: Candidate Fraction of Supported Meshes
+    variableAttribute: continuous
+    variableUnit: proportion
+    variableDescription: Current UMD candidate meshes divided by supported comparison meshes in the assigned government
+      or land context; preserve denominator counts. Reaggregate the validated UMD screen using unchanged mesh-government
+      assignments and parent-city consolidation. Retain all source rows, unavailable links and zero-denominator
+      contexts; no filling.
+    variableSource: municipal_evidence
+    observationNumber: 1741
+    dtype: float64
+    variableRole: descriptive mismatch measure
+    statisticalUnit: Municipal government
+    sourcePeriod: 2024 screen
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/exp/umd-municipal-context/municipal_evidence_2024.parquet
+    sourceLineage: []
+  length_weighted_24h_volume:
+    variableNameInDataset: Length Weighted 24h Volume
+    variableNameInArticle: Length Weighted 24h Volume
+    variableAttribute: continuous
+    variableUnit: vehicles/24 h
+    variableDescription: Published daily vehicle volumes averaged with positive source-segment-length weights; unavailable
+      traffic remains missing. Reuse existing source-derived values; no additional transformation or filling.
+    variableSource: traffic_survey
+    observationNumber: 1734
+    dtype: float64
+    variableRole: descriptive utilization measure
+    statisticalUnit: Municipal government
+    sourcePeriod: '2021'
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/exp/umd-municipal-context/municipal_evidence_2024.parquet
+    sourceLineage: []
+  maintenance_share_of_expenditure:
+    variableNameInDataset: Maintenance Share of Expenditure
+    variableNameInArticle: Maintenance Share of Expenditure
+    variableAttribute: continuous
+    variableUnit: ratio
+    variableDescription: The same government Road and Bridge maintenance spending divided by total expenditure;
+      preserve actual fiscal year and amounts. Reuse existing source-derived values; no additional transformation
+      or filling.
+    variableSource: municipal_finance
+    observationNumber: 1741
+    dtype: float64
+    variableRole: descriptive fiscal measure
+    statisticalUnit: Municipal government
+    sourcePeriod: FY2023
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/exp/umd-municipal-context/municipal_evidence_2024.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/municipality-mismatch-trial/decisions.json
+      confirmedInput: data/exp/data-preprocessing/municipality-mismatch-trial/municipal_fiscal_reference_confirmed_input.parquet
+      processedPath: data/processed/national/municipality_mismatch_trial/municipal_fiscal_reference_preprocessed.parquet
+      originalName: Maintenance Share of Expenditure
+  maintenance_share_of_standard_fiscal_scale:
+    variableNameInDataset: Maintenance Share of Standard Fiscal Scale
+    variableNameInArticle: Maintenance Share of Standard Fiscal Scale
+    variableAttribute: continuous
+    variableUnit: ratio
+    variableDescription: The same government Road and Bridge maintenance spending divided by standard fiscal scale.
+      Reuse existing source-derived values; no additional transformation or filling.
+    variableSource: municipal_finance
+    observationNumber: 1741
+    dtype: float64
+    variableRole: descriptive fiscal measure
+    statisticalUnit: Municipal government
+    sourcePeriod: FY2023
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/exp/umd-municipal-context/municipal_evidence_2024.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/municipality-mismatch-trial/decisions.json
+      confirmedInput: data/exp/data-preprocessing/municipality-mismatch-trial/municipal_fiscal_reference_confirmed_input.parquet
+      processedPath: data/processed/national/municipality_mismatch_trial/municipal_fiscal_reference_preprocessed.parquet
+      originalName: Maintenance Share of Standard Fiscal Scale
+  single_year_fiscal_revenue_need_ratio:
+    variableNameInDataset: Single Year Fiscal Revenue Need Ratio
+    variableNameInArticle: Single Year Fiscal Revenue Need Ratio
+    variableAttribute: continuous
+    variableUnit: ratio
+    variableDescription: Single-year standard fiscal revenue divided by standard fiscal need; distinct from the
+      encoded three-year strength index. Reuse existing source-derived values; no additional transformation or filling.
+    variableSource: municipal_finance
+    observationNumber: 1741
+    dtype: float64
+    variableRole: descriptive fiscal-resource measure
+    statisticalUnit: Municipal government
+    sourcePeriod: FY2023
+    observationCountDefinition: Nonmissing values in the stated statistical unit; static counts use distinct meshes,
+      not replicated panel rows.
+    currentDataPath: data/exp/umd-municipal-context/municipal_evidence_2024.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/municipality-mismatch-trial/decisions.json
+      confirmedInput: data/exp/data-preprocessing/municipality-mismatch-trial/municipal_fiscal_reference_confirmed_input.parquet
+      processedPath: data/processed/national/municipality_mismatch_trial/municipal_fiscal_reference_preprocessed.parquet
+      originalName: Single Year Fiscal Revenue Need Ratio
+  region:
+    variableNameInDataset: Region
+    variableNameInArticle: Region
+    variableAttribute: categorical
+    variableUnit: administrative category
+    variableDescription: Frozen greatest-positive-land-overlap assignment with retained reviewed exceptions; a stratification
+      reference, not an added numeric control.
+    variableSource: administrative_geography
+    observationNumber: 383386
+    dtype: string
+    variableRole: geographic stratum
+    statisticalUnit: Mesh
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/regional/mesh_region_confirmed_input.parquet
+      processedPath: data/processed/national/mesh_region_national_preprocessed.parquet
+      originalName: region
+  prefecture:
+    variableNameInDataset: Prefecture
+    variableNameInArticle: Prefecture
+    variableAttribute: categorical
+    variableUnit: administrative category
+    variableDescription: Frozen greatest-positive-land-overlap assignment with retained reviewed exceptions; a stratification
+      reference, not an added numeric control.
+    variableSource: administrative_geography
+    observationNumber: 383386
+    dtype: string
+    variableRole: geographic stratum
+    statisticalUnit: Mesh
+    currentDataPath: data/processed/national/modis_umd/association_candidate_panel_preprocessed.parquet
+    sourceLineage:
+    - decisionsPath: data/exp/data-preprocessing/decisions.json
+      confirmedInput: data/exp/data-preprocessing/prefecture/mesh_prefecture_confirmed_input.parquet
+      processedPath: data/processed/national/mesh_prefecture_national_preprocessed.parquet
+      originalName: prefecture
+    - decisionsPath: data/exp/data-preprocessing/municipality-mismatch-trial/decisions.json
+      confirmedInput: data/exp/data-preprocessing/municipality-mismatch-trial/municipal_fiscal_reference_confirmed_input.parquet
+      processedPath: data/processed/national/municipality_mismatch_trial/municipal_fiscal_reference_preprocessed.parquet
+      originalName: Prefecture
+tableDictionary:
+  table_analytical_variables_and_sample_coverage:
+    tableId: table_analytical_variables_and_sample_coverage
+    tablePath: data/results/tables/Table_analytical_variables_and_sample_coverage.xlsx
+    tableCaption: Analytical Variables and Sample Coverage
+    tableAim: Document the units, actual source periods, coverage, missingness and distributions of the twenty-two
+      confirmed substantive variables, separating panel, mesh-screen and government units.
+    tableExplanation: Analytical Variables and Sample Coverage. Original-scale available-case moments use the stated
+      statistical unit. SD is the sample standard deviation. See the Notes and Land context sheets for cohort boundaries,
+      date alignment, retained zeros, missing indicators and category counts. Numerical values in the workbook retain
+      full precision.
+    tableSuitableSection: Data and variable construction
+    title: Analytical Variables and Sample Coverage
+    scriptPath: src/analyses/table_analytical_variables_and_sample_coverage.py
+    captionPath: data/results/tables/Table_analytical_variables_and_sample_coverage.caption.md
+    validationPath: data/exp/figure-table-generation/analytical-variables-and-sample-coverage/validation.json
+    artifactSha256: 791dab0663f7b93e63eebbe435d6cf28ba9cd3020e7c0860994b2762f1848e8a
+    sourceHashes:
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+      data/exp/umd-mismatch-screen/mesh_screen_2024.parquet: 1dfe7ebc63e71ea6b9c3f41d6545f9436bba85aa9bbe93a7921e8cc553bb7e87
+      data/exp/umd-municipal-context/municipal_evidence_2024.parquet: 83ec4e5a758ca81df800974e7b45bd39ded5d2ca33cb32e4d20b2ee554930c60
+      data/exp/umd-four-layer/pooled_validation.json: a02a1553e01e0618401f0816f46c1d066bed79089d6fe442c27edf31d89cd06e
+      data/exp/umd-mismatch-screen/validation.json: 5b5441c8243f94fd7633d1d6f17affe3d2a27d600f334bba7e223a66789f5304
+      data/exp/umd-municipal-context/validation.json: 9027cb826920e9232f4409d18b5511e4a0bd3c415fe9847c0b7a3f75d4676344
+    captionSourceHashes: {}
+    worksheets:
+    - name: Variables and coverage
+      rows: 22
+      columns: 9
+    - name: Notes
+      rows: 12
+      columns: 2
+    - name: Land context
+      rows: 7
+      columns: 3
+  table_national_road_associations:
+    tableId: table_national_road_associations
+    tablePath: data/results/tables/Table_national_road_associations.xlsx
+    tableCaption: National Road Associations
+    tableAim: Compare same-sample baseline and extended national pooled associations in a stargazer-style model-column
+      table, with mesh-clustered standard errors and significance stars.
+    tableExplanation: National Road Associations. Stargazer-style presentation of original-scale Nighttime Radiance
+      pooled OLS models. Coefficients are followed by mesh-clustered CR1 standard errors in parentheses; * p < 0.10,
+      ** p < 0.05, *** p < 0.01, using the existing two-sided normal-reference coefficient tests. Both models share
+      383,386 meshes, 1,916,930 records and five periods, without fixed effects. Water is the omitted UMD reference.
+      Blank baseline cells denote excluded controls, not estimated zeros. R-squared describes complete-model fit.
+      Full numerical details and 95 percent confidence bounds are retained in Estimation details. See Notes for
+      dates, units and interpretation limits. Layout follows the R stargazer convention, rendered reproducibly with
+      local Python without model refitting.
+    tableSuitableSection: 'Results: national conditional association'
+    title: National Road Associations
+    scriptPath: src/analyses/table_national_road_associations.py
+    captionPath: data/results/tables/Table_national_road_associations.caption.md
+    validationPath: data/exp/figure-table-generation/national-road-associations/validation.json
+    artifactSha256: 60cf0767c573abc07e0b20c40e6dec7561220c2884868162fd5b94cb85999771
+    sourceHashes:
+      data/exp/umd-four-layer/national_coefficients.csv: 9ff3e0d4196c40d821ba8fc689c2333e32c4fcc486ff55b22bb3e3728d2eee8c
+      data/exp/umd-four-layer/national_validation.json: 60c04c8a54f5377c82a8454a6d0cee64a737c91573c90e1500765904c453e8b7
+      data/exp/umd-four-layer/pooled_validation.json: a02a1553e01e0618401f0816f46c1d066bed79089d6fe442c27edf31d89cd06e
+      data/exp/umd-four-layer/delivery_validation.json: 9e6d05758b14f75c3b243a68d48ca1a9860d36c8c433ded3b0606f037b1b8938
+      data/exp/umd-four-layer/independent_delivery_validation.json: 29aa9e645f17cc35501889073e2568ecd8ede0ef6c27619d01a3b39fb21cbdfe
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+    captionSourceHashes: {}
+    worksheets:
+    - name: National associations
+      rows: 41
+      columns: 3
+    - name: Estimation details
+      rows: 17
+      columns: 12
+    - name: Notes
+      rows: 14
+      columns: 2
+  table_regional_road_association_comparison:
+    tableId: table_regional_road_association_comparison
+    tablePath: data/results/tables/Table_regional_road_association_comparison.xlsx
+    tableCaption: Regional Road Association Comparison
+    tableAim: Provide a compact comparison of baseline and extended road associations for the nine transportation-statistics
+      Regions.
+    tableExplanation: 'Regional Road Association Comparison. Nine separate original-scale pooled OLS road coefficients
+      for Nighttime Radiance, controlling for Population in the baseline and adding the approved five UMD land-cover
+      and six facility controls in the extension. Both models use identical regional samples with an intercept and
+      no fixed effects. Square brackets show mesh-clustered CR1 normal-reference 95 percent confidence intervals.
+      Stars use existing two-sided normal-reference p values: * p < 0.10; ** p < 0.05; *** p < 0.01, without multiple-testing
+      adjustment. Every mesh contributes five records, so observations are five times the displayed mesh count.
+      R-squared is centered complete-model fit. Water is the omitted land-cover reference. Individual intervals
+      do not test between-Region differences. Full numerical details and date, geography and interpretation notes
+      accompany the workbook.'
+    tableSuitableSection: 'Results: administrative spatial heterogeneity'
+    title: Regional Road Association Comparison
+    scriptPath: src/analyses/table_regional_road_association_comparison.py
+    captionPath: data/results/tables/Table_regional_road_association_comparison.caption.md
+    validationPath: data/exp/figure-table-generation/regional-road-association-comparison/validation.json
+    artifactSha256: 79e16f9ef692b256b3cca8889fb9552561f28f64852e30ad138066c3e2fb561b
+    sourceHashes:
+      data/exp/umd-four-layer/regional_coefficients.csv: f262330206e02773056e9c3704d5f3f9f96a5985e77f50cb8c79d5d653b0a557
+      data/exp/umd-four-layer/regional_validation.json: f301a35f8b0a7d6dc16e82d7f9fd03c3b86bde8671373d1bcc40d56fdb7c73a1
+      data/exp/umd-four-layer/pooled_validation.json: a02a1553e01e0618401f0816f46c1d066bed79089d6fe442c27edf31d89cd06e
+      data/exp/umd-four-layer/delivery_validation.json: 9e6d05758b14f75c3b243a68d48ca1a9860d36c8c433ded3b0606f037b1b8938
+      data/exp/umd-four-layer/execution_contract.json: 289ab61fb2eac81b2a8064ff01cad9d2946c814624f57c3c473053e4408f5571
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+    captionSourceHashes: {}
+    worksheets:
+    - name: Regional comparison
+      rows: 9
+      columns: 6
+    - name: Road estimate details
+      rows: 18
+      columns: 12
+    - name: Notes
+      rows: 12
+      columns: 2
+  table_prefecture_road_association_comparison:
+    tableId: table_prefecture_road_association_comparison
+    tablePath: data/results/tables/Table_prefecture_road_association_comparison.xlsx
+    tableCaption: Prefecture Road Association Comparison
+    tableAim: Provide the complete forty-seven-Prefecture comparison in a compact appendix table, retaining unavailable
+      extended estimates.
+    tableExplanation: 'Prefecture Road Association Comparison. Forty-seven separate original-scale pooled OLS road
+      coefficients for Nighttime Radiance, controlling for Population in the baseline and adding the approved five
+      UMD land-cover and six facility controls in the extension. Both models use identical prefecture samples with
+      an intercept and no fixed effects. Square brackets show mesh-clustered CR1 normal-reference 95 percent confidence
+      intervals. Stars use existing two-sided normal-reference p values: * p < 0.10; ** p < 0.05; *** p < 0.01,
+      without multiple-testing adjustment. Every mesh contributes five records, so observations are five times the
+      displayed mesh count. R-squared is centered complete-model fit. Water is the omitted land-cover reference.
+      Individual intervals do not test between-Prefecture differences. Extended fits omit constant Barren in Tochigi,
+      Saitama, Gifu and Nara; Nara also omits redundant Shrublands and Grasslands. All forty-seven road coefficients
+      are estimable. Full numerical details and date, geography and interpretation notes accompany the workbook.'
+    tableSuitableSection: 'Results: prefecture spatial heterogeneity'
+    title: Prefecture Road Association Comparison
+    scriptPath: src/analyses/table_prefecture_road_association_comparison.py
+    captionPath: data/results/tables/Table_prefecture_road_association_comparison.caption.md
+    validationPath: data/exp/figure-table-generation/prefecture-road-association-comparison/validation.json
+    artifactSha256: b1edf18e4f47a2bcd41d6d8fa1e115b4a61f2fb419b0a023fad530107badb72c
+    sourceHashes:
+      data/exp/umd-four-layer/prefecture_coefficients.csv: 9a35a682343be715566de1f55bf1b0b5d635ef8c154a163105d1ae37708fd8a8
+      data/exp/umd-four-layer/prefecture_validation.json: 71fcb7743ab9ad6a425d40e685a510815fbf04d4ff1e8c967d751905bf3f778d
+      data/exp/umd-four-layer/pooled_validation.json: a02a1553e01e0618401f0816f46c1d066bed79089d6fe442c27edf31d89cd06e
+      data/exp/umd-four-layer/delivery_validation.json: 9e6d05758b14f75c3b243a68d48ca1a9860d36c8c433ded3b0606f037b1b8938
+      data/exp/umd-four-layer/execution_contract.json: 289ab61fb2eac81b2a8064ff01cad9d2946c814624f57c3c473053e4408f5571
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+    captionSourceHashes: {}
+    worksheets:
+    - name: Prefecture comparison
+      rows: 47
+      columns: 6
+    - name: Road estimate details
+      rows: 94
+      columns: 12
+    - name: Notes
+      rows: 13
+      columns: 2
+  table_municipal_mismatch_traffic_and_fiscal_correlations:
+    tableId: table_municipal_mismatch_traffic_and_fiscal_correlations
+    tablePath: data/results/tables/Table_municipal_mismatch_traffic_and_fiscal_correlations.xlsx
+    tableCaption: Municipal Mismatch, Traffic and Fiscal Correlations
+    tableAim: Compare descriptive Spearman associations overall and by land context using both maintenance-share
+      denominators and actual pairwise available samples.
+    tableExplanation: 'Municipal Mismatch, Traffic and Fiscal Correlations. Descriptive Spearman correlations and
+      actual pairwise available government counts for overall and seven UMD land contexts. The predictor is the
+      fraction of supported meshes flagged as potential mismatch candidates; context-specific fractions are paired
+      with whole-government outcomes. Traffic is surveyed segment-length-weighted 24-hour volume. Maintenance denominators
+      are total expenditure and standard fiscal scale. Fiscal revenue/need is the single-year standard fiscal-resource
+      ratio. Barren correlations are unavailable (N=0); Incomplete coverage has only 10 traffic and 13 fiscal pairs.
+      Years: road/light and land context 2024, Population 2020, traffic 2021 and fiscal year 2023. Correlations
+      use average-tie ranks without new significance tests, spatial adjustment or causal interpretation. Three decimals
+      are shown and full numerical values are retained separately. Traffic territory and fiscal ownership differ;
+      maintenance spending does not measure costs attributable to flagged roads.'
+    tableSuitableSection: 'Results: municipal context contrasts'
+    title: Municipal Mismatch, Traffic and Fiscal Correlations
+    scriptPath: src/analyses/table_municipal_mismatch_traffic_and_fiscal_correlations.py
+    captionPath: data/results/tables/Table_municipal_mismatch_traffic_and_fiscal_correlations.caption.md
+    validationPath: data/exp/figure-table-generation/municipal-mismatch-traffic-and-fiscal-correlations/validation.json
+    artifactSha256: 197e39c322fd1f3416696c61db4edc3c16827c3fa23b676b5184e21cdb6f5716
+    sourceHashes:
+      data/exp/umd-municipal-context/municipal_evidence_2024.parquet: 83ec4e5a758ca81df800974e7b45bd39ded5d2ca33cb32e4d20b2ee554930c60
+      data/exp/umd-municipal-context/municipal_land_context_summary.parquet: 3db9ab1a337e63bf22daeac7b6376520e5910deb15f3dc2741232bbfb00ca8f4
+      data/exp/umd-municipal-context/municipal_context_rank_correlations.csv: ef9206d858df16b88770d1a5cc8d1fb94caf7fce7cdc85a22b3ee7d79a2a6c32
+      data/exp/umd-municipal-context/validation.json: 9027cb826920e9232f4409d18b5511e4a0bd3c415fe9847c0b7a3f75d4676344
+    captionSourceHashes: {}
+    worksheets:
+    - name: Municipal correlations
+      rows: 8
+      columns: 9
+    - name: Correlation details
+      rows: 32
+      columns: 6
+    - name: Notes
+      rows: 12
+      columns: 2
+figureDictionary:
+  fig_spatial_distribution_of_key_variables:
+    figureId: fig_spatial_distribution_of_key_variables
+    figurePath: data/results/figures/Figure_spatial_distribution_of_key_variables.png
+    figureCaption: Spatial Distribution of Key Variables
+    figurePanelCount: 4
+    figureNote: "Panels a-c map equal-weight means of Road Length Density, matched Population and Nighttime Radiance over five observed periods. Panel d maps selected medical, school, visitor/event and logistics source-location records. Means are observation means rather than continuous annual averages; facility snapshots are static. Exact zero means are gray, and positive values use separate piecewise-linear color scales. Mesh footprints and island insets are retained."
+    figureAim: Establish the spatial context of road provision and economic activity using five-period mesh means
+      of Road Length Density, Population and Nighttime Radiance, plus source-location points for the four selected
+      facility snapshots.
+    figureExplanation: 'Spatial distribution of key variables. Panels a-c show equal-weight means over the 2002,
+      2003, 2004, 2010 and 2024 road/light observations: road length density, matched population and NTL radiance.
+      Population snapshots are 2000, 2005, 2005, 2010 and 2020. These are observation means, not continuous annual
+      averages. Actual standard mesh footprints are drawn without interpolation. Gray cells denote valid zero means;
+      positive values use the same continuous blue-green-yellow-red palette, with a separate numerical scale and
+      units for each variable. To show detail in the skewed distributions, color positions are piecewise-linear
+      functions of the original values; successive labeled ticks occupy equal colorbar space. The scales are nonlinear
+      overall, and no analytical values are transformed or clipped. The blue endpoint marked 0+ denotes the limit
+      of positive values; exact zeros are gray. Road density and population ticks are integers; NTL retains fractional
+      ticks for low radiance. Geographic gridlines are drawn in all main maps and insets; the PNG is exported at
+      600 dpi. Panel d draws the retained source-location records for medical facilities (2020), schools (2023),
+      visitor/event facilities (2014) and logistics facilities (2013), using the accepted within-category selection
+      and duplicate rules. Points are restricted to the same 383,386 analytical meshes, are not relocated or jittered,
+      and can overlap. The facility display is not a comprehensive POI inventory or a cross-category count of unique
+      institutions. Pale blue map backgrounds represent the ocean. Light land shading is geographic context outside
+      the analytical footprints. Main-island, southwest and Ogasawara views have identical extents across panels;
+      the island insets use separate scales. Four Minamitorishima meshes remain outside the approved extension because
+      land cover is unavailable. Source road definitions and population timing remain as documented.'
+    figureSuitableSection: Data and study context
+    title: Spatial Distribution of Key Variables
+    scriptPath: src/analyses/figure_spatial_distribution_of_key_variables.py
+    captionPath: data/results/figures/Figure_spatial_distribution_of_key_variables.caption.md
+    validationPath: data/exp/figure-table-generation/spatial-distribution-of-key-variables/validation.json
+    artifactSha256: 7b7f0defbbb47c551ee878dd23629f6d190b97b7002cbb6a0ca476a7616ae4e3
+    sourceHashes:
+      data/processed/national/association_spatial_heterogeneity/panel_preprocessed.parquet: 367624671e416ff01c6f69df0126addfd4fa69b523ee00b9e85c10b6e381c4b3
+      data/exp/gwpr-twoways/map_reference_lines.json: ca2ee6fc8acb718cbd1abcae7943b71baa0391038e5e28587b411490f0f8b6b6
+      data/exp/data-preprocessing/static-facilities/facility-ledgers/medical_allocated_facilities.parquet: 96dcf89df2630aa5a1ac36844ada43e5e06b752733de475dc3dd7fdb6568d90c
+      data/exp/data-preprocessing/static-facilities/facility-ledgers/schools_allocated_facilities.parquet: d24fc103c8819e683f6f70b60cf96d044dc9285874c549eae0627f0dd3431fee
+      data/exp/data-preprocessing/static-facilities/facility-ledgers/visitor_facilities_allocated_facilities.parquet: 71f1967923da36823ebed41b4fdfbe17c19c538403a1b2251e8982d056032c62
+      data/exp/data-preprocessing/static-facilities/facility-ledgers/logistics_allocated_facilities.parquet: 1fcc84d1cb23d73bea1688959fe8b0f18958754bd39e3051466df3b7bb2f94d6
+    captionSourceHashes: {}
+  fig_regional_road_associations:
+    figureId: fig_regional_road_associations
+    figurePath: data/results/figures/Figure_regional_road_associations.png
+    figureCaption: Regional Road Associations
+    figurePanelCount: 2
+    figureNote: "Panel a compares baseline and extended pooled road-density coefficients across nine transportation-statistics Regions, with individual mesh-clustered CR1 95 percent intervals. Stepped dashed connectors display coefficient changes without testing those changes. Panel b maps extended coefficients over regional polygons on a zero-centered diverging scale. Both models use identical area-specific five-period samples, with an intercept and no fixed effects; associations are conditional rather than causal."
+    figureAim: Compare baseline and extended road-density coefficients with individual mesh-clustered 95 percent
+      intervals across nine Regions in a forest panel and locate the extended associations in an administrative-area
+      map; distinguish unavailable estimates.
+    figureExplanation: Regional Road Associations. Panel a compares baseline (circles) and extended (diamonds) original-scale
+      pooled road-density coefficients, with Nighttime Radiance as the outcome, and individual normal 95 percent
+      intervals from mesh-clustered CR1 covariance using the actual retained parameter count. Baseline controls
+      for Population; the extension adds the five selected annual UMD land-cover shares, railway/airport distances
+      and four selected facility counts. Both include an intercept and no fixed effects, on identical area-specific
+      samples from 383,386 meshes and 1,916,930 records. The five road/light periods are 2002, 2003, 2004, 2010
+      and 2024; census matches are 2000, 2005, 2005, 2010 and 2020. Road coefficients have radiance units (nW/cm2/sr)
+      per km/km2 of road density. Forest intervals are not truncated; the forest horizontal scale differs between
+      the regional and prefecture figures to retain readability. Gray dashed stepped connectors have a horizontal
+      segment centered between the two model point heights and vertical end segments joining their markers, showing
+      the coefficient change after adding controls; they are not confidence intervals or significance tests of the
+      change. Areas with unavailable extended fits have no connector. Panel b colors the extended coefficient over
+      frozen 2024 official administrative polygons; regional polygons follow the accepted nine-region transportation-statistics
+      grouping. Both administrative maps use the same continuous linear blue-green-white-yellow-red scale from -0.25
+      to 0.25, with white exactly at zero, without clipping coefficients. The three-item model and connector legend
+      is stacked directly below panel a; the prefecture and regional figures use the same 18 by 14 inch canvas and
+      panel geometry. Panel a is narrow and tall; panel b has approximately 2.59 times its plotting width. Both
+      plotting panels have identical vertical lengths and aligned upper and lower edges. Map geometry retains its
+      geographic aspect ratio. Fills represent area-level conditional slopes, not mesh-specific estimates or a statement
+      of complete within-area sample coverage. Maps do not encode significance. Gray represents unavailable extended
+      fits if any; all nine regional and all forty-seven prefecture extended fits are available in this UMD delivery,
+      including Tokyo and Nara. Water is the omitted land-cover reference. The included UMD categories are Urban,
+      Forest, Cropland, Shrublands and Grasslands (classes 6-10), and Barren (class 15). Constant or redundant added
+      controls are omitted while retaining their nuisance column space; the road and population coefficients must
+      remain identifiable. Nara omits constant Barren and redundant Shrublands and Grasslands; its road coefficient
+      remains estimable. Display geometry is dissolved then simplified at 0.005 degrees; source geometry and analytical
+      assignments are unchanged. Southwest and Ogasawara insets use separate scales; views follow the analytical
+      map extents, and remote land outside these views is not shown. Pale blue denotes ocean. Intervals are unadjusted
+      for multiple comparisons and are not formal between-area difference tests. Conditional associations do not
+      establish causal effects or excessive provision. Export is 600 dpi.
+    figureSuitableSection: 'Results: administrative spatial heterogeneity'
+    title: Regional Road Associations
+    scriptPath: src/analyses/figure_regional_road_associations.py
+    captionPath: data/results/figures/Figure_regional_road_associations.caption.md
+    validationPath: data/exp/figure-table-generation/regional-road-associations/validation.json
+    artifactSha256: 5af63bec12b10aab494138f52b0327bc0ad115f66b2cf633b7ecaf151e763653
+    sourceHashes:
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+      data/exp/data-preprocessing/regional/reference/manifest.json: b6ad4fd7f288d4c8f876a9e11344cbb50537d144884c7f5cd0275ae70945888a
+      data/exp/data-preprocessing/expanded-analysis-geography/prefecture-overlap/mesh_prefecture_overlaps.csv: 71ca6e40cccc3f23e6c459667d0dba44b6aa590f14a7920c3ff2ae99186a426c
+      data/exp/umd-four-layer/execution_contract.json: 289ab61fb2eac81b2a8064ff01cad9d2946c814624f57c3c473053e4408f5571
+      data/exp/umd-four-layer/pooled_validation.json: a02a1553e01e0618401f0816f46c1d066bed79089d6fe442c27edf31d89cd06e
+      data/exp/umd-four-layer/regional_validation.json: f301a35f8b0a7d6dc16e82d7f9fd03c3b86bde8671373d1bcc40d56fdb7c73a1
+      data/exp/umd-four-layer/regional_coefficients.csv: f262330206e02773056e9c3704d5f3f9f96a5985e77f50cb8c79d5d653b0a557
+      data/exp/umd-four-layer/prefecture_validation.json: 71fcb7743ab9ad6a425d40e685a510815fbf04d4ff1e8c967d751905bf3f778d
+      data/exp/umd-four-layer/prefecture_coefficients.csv: 9a35a682343be715566de1f55bf1b0b5d635ef8c154a163105d1ae37708fd8a8
+    captionSourceHashes: {}
+  fig_prefecture_road_associations:
+    figureId: fig_prefecture_road_associations
+    figurePath: data/results/figures/Figure_prefecture_road_associations.png
+    figureCaption: Prefecture Road Associations
+    figurePanelCount: 2
+    figureNote: "Panel a compares baseline and extended pooled road-density coefficients for all forty-seven Prefectures, with individual mesh-clustered CR1 95 percent intervals. Stepped dashed connectors display coefficient changes without testing those changes. Panel b maps extended coefficients over prefectural polygons using the same scale as the regional map. All extended road slopes are estimable; omitted constant or redundant nuisance controls remain documented. Intervals do not test between-Prefecture differences."
+    figureAim: Compare baseline and extended road-density coefficients with individual mesh-clustered 95 percent
+      intervals across forty-seven Prefectures in a forest panel and locate the extended associations in an administrative-area
+      map; distinguish unavailable estimates.
+    figureExplanation: Prefecture Road Associations. Panel a compares baseline (circles) and extended (diamonds)
+      original-scale pooled road-density coefficients, with Nighttime Radiance as the outcome, and individual normal
+      95 percent intervals from mesh-clustered CR1 covariance using the actual retained parameter count. Baseline
+      controls for Population; the extension adds the five selected annual UMD land-cover shares, railway/airport
+      distances and four selected facility counts. Both include an intercept and no fixed effects, on identical
+      area-specific samples from 383,386 meshes and 1,916,930 records. The five road/light periods are 2002, 2003,
+      2004, 2010 and 2024; census matches are 2000, 2005, 2005, 2010 and 2020. Road coefficients have radiance units
+      (nW/cm2/sr) per km/km2 of road density. Forest intervals are not truncated; the forest horizontal scale differs
+      between the regional and prefecture figures to retain readability. Gray dashed stepped connectors have a horizontal
+      segment centered between the two model point heights and vertical end segments joining their markers, showing
+      the coefficient change after adding controls; they are not confidence intervals or significance tests of the
+      change. Areas with unavailable extended fits have no connector. Panel b colors the extended coefficient over
+      frozen 2024 official administrative polygons; regional polygons follow the accepted nine-region transportation-statistics
+      grouping. Both administrative maps use the same continuous linear blue-green-white-yellow-red scale from -0.25
+      to 0.25, with white exactly at zero, without clipping coefficients. The three-item model and connector legend
+      is stacked directly below panel a; the prefecture and regional figures use the same 18 by 14 inch canvas and
+      panel geometry. Panel a is narrow and tall; panel b has approximately 2.59 times its plotting width. Both
+      plotting panels have identical vertical lengths and aligned upper and lower edges. Map geometry retains its
+      geographic aspect ratio. Fills represent area-level conditional slopes, not mesh-specific estimates or a statement
+      of complete within-area sample coverage. Maps do not encode significance. Gray represents unavailable extended
+      fits if any; all nine regional and all forty-seven prefecture extended fits are available in this UMD delivery,
+      including Tokyo and Nara. Water is the omitted land-cover reference. The included UMD categories are Urban,
+      Forest, Cropland, Shrublands and Grasslands (classes 6-10), and Barren (class 15). Constant or redundant added
+      controls are omitted while retaining their nuisance column space; the road and population coefficients must
+      remain identifiable. Nara omits constant Barren and redundant Shrublands and Grasslands; its road coefficient
+      remains estimable. Display geometry is dissolved then simplified at 0.005 degrees; source geometry and analytical
+      assignments are unchanged. Southwest and Ogasawara insets use separate scales; views follow the analytical
+      map extents, and remote land outside these views is not shown. Pale blue denotes ocean. Intervals are unadjusted
+      for multiple comparisons and are not formal between-area difference tests. Conditional associations do not
+      establish causal effects or excessive provision. Export is 600 dpi.
+    figureSuitableSection: 'Results: administrative spatial heterogeneity'
+    title: Prefecture Road Associations
+    scriptPath: src/analyses/figure_prefecture_road_associations.py
+    captionPath: data/results/figures/Figure_prefecture_road_associations.caption.md
+    validationPath: data/exp/figure-table-generation/prefecture-road-associations/validation.json
+    artifactSha256: 70f989af77c98e00929ff40871a7fafb22567bde27c79c8c1b16e4fc89006c1f
+    sourceHashes:
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+      data/exp/data-preprocessing/regional/reference/manifest.json: b6ad4fd7f288d4c8f876a9e11344cbb50537d144884c7f5cd0275ae70945888a
+      data/exp/data-preprocessing/expanded-analysis-geography/prefecture-overlap/mesh_prefecture_overlaps.csv: 71ca6e40cccc3f23e6c459667d0dba44b6aa590f14a7920c3ff2ae99186a426c
+      data/exp/umd-four-layer/execution_contract.json: 289ab61fb2eac81b2a8064ff01cad9d2946c814624f57c3c473053e4408f5571
+      data/exp/umd-four-layer/pooled_validation.json: a02a1553e01e0618401f0816f46c1d066bed79089d6fe442c27edf31d89cd06e
+      data/exp/umd-four-layer/regional_validation.json: f301a35f8b0a7d6dc16e82d7f9fd03c3b86bde8671373d1bcc40d56fdb7c73a1
+      data/exp/umd-four-layer/regional_coefficients.csv: f262330206e02773056e9c3704d5f3f9f96a5985e77f50cb8c79d5d653b0a557
+      data/exp/umd-four-layer/prefecture_validation.json: 71fcb7743ab9ad6a425d40e685a510815fbf04d4ff1e8c967d751905bf3f778d
+      data/exp/umd-four-layer/prefecture_coefficients.csv: 9a35a682343be715566de1f55bf1b0b5d635ef8c154a163105d1ae37708fd8a8
+    captionSourceHashes: {}
+  fig_local_road_associations_across_japan:
+    figureId: fig_local_road_associations_across_japan
+    figurePath: data/results/figures/Figure_local_road_associations_across_japan.png
+    figureCaption: Local Road Associations across Japan
+    figurePanelCount: 1
+    figureNote: "The main-text mesh map displays extended geographically weighted pooled road-density coefficients using a 5 km fixed bisquare radius. Gray indicates unavailable fits. Colors saturate at plus or minus 0.30 while numerical coefficients remain unchanged. No local uncertainty or significance is encoded. The companion Appendix map documents estimation support."
+    figureAim: Main-text figure showing spatial variation in extended geographically weighted pooled road-density
+      coefficients, distinguishing unavailable fits from zero slopes.
+    figureExplanation: 'Local Road Associations across Japan. This independent main-text figure shows the extended
+      geographically weighted pooled road-density coefficient surface. The coefficient is conditional on Population,
+      five annual UMD land-cover shares and six selected static facility/accessibility controls. Water is the omitted
+      land-cover reference. UMD classes 6-10 form Shrublands and Grasslands and class 15 is Barren. Constant or
+      redundant nuisance controls are omitted while retaining their column space; road and population must remain
+      identifiable. An intercept is included; no fixed effects are included. Nighttime Radiance proxies broader
+      economic activity. The five road/light periods are 2002, 2003, 2004, 2010 and 2024, with census matches 2000,
+      2005, 2005, 2010 and 2020. Coefficients have radiance units (nW/cm2/sr) per km/km2 of road density. The 5
+      km fixed-distance bisquare kernel uses great-circle centroid distances. Bandwidth selection used whole-mesh
+      holdout on identical estimable validation support: 985 of 1,282 sampled centers, representing 75.25 percent
+      of tile expansion weight. This is an approximate optimum conditional on that support, not a verified national
+      optimum. Final fits include the focal mesh. All 383,386 complete-case focal meshes appear in this figure:
+      357,316 estimable and 26,070 non-estimable. Gray marks non-estimable fits, not zero coefficients. Pale blue
+      denotes ocean; light gray land is display context without a model estimate. Mesh rectangles are 1/120 degree
+      latitude by 1/80 degree longitude, with no interpolation or additional land mask. Southwest and Ogasawara
+      insets use separate scales. Four original-source Minamitorishima meshes lack land cover and are absent from
+      this common estimation cohort; their source rows remain retained. Of the unavailable fits, 23,837 have constant
+      mandatory road or population terms and 2,233 have an unidentifiable retained design. No local uncertainty
+      or significance shading is provided. Associations neither identify causality nor prove excessive road provision.
+      Export is 600 dpi.
+
+      The continuous blue-green-white-yellow-red color scale is centered at zero and saturates at ±0.30; this rounds
+      the 98th percentile of absolute coefficients (0.291658) upwards to a 0.05 increment. Only colors saturate
+      for 6,562 meshes; all numerical coefficients remain unchanged. The original coefficient range is -9404.490615
+      to 3.621047. The 9,936 exact zero slopes appear white. The companion appendix figure, Local Road Association
+      Estimation Support, documents neighborhood availability and retains the twenty-four estimable neighborhoods
+      below thirty observation records.'
+    figureSuitableSection: 'Results: local spatial heterogeneity'
+    title: Local Road Associations across Japan
+    scriptPath: src/analyses/figure_local_road_associations_across_japan.py
+    captionPath: data/results/figures/Figure_local_road_associations_across_japan.caption.md
+    validationPath: data/exp/figure-table-generation/local-road-associations-across-japan/validation.json
+    artifactSha256: 40a5a09fe5b1f4bcb043044bf6086836342aae90534e9826b703939626f0419d
+    sourceHashes:
+      data/exp/umd-four-layer/local-fit-5km/local_coefficients.parquet: 27d467ab5f5250b7c8c82bf88b49a64c63fc24284442fe157f5f2d65484f533b
+      data/exp/umd-four-layer/local-fit-5km/local_fit_validation.json: 5f74801f3c50be1d6fe7ab843e3e5a2949bcb17347b1a74341d434d77d4cd0ac
+      data/exp/umd-four-layer/active_local_result.json: 6921c039cde66f0dd8cccc8374c8b44ed9f3800dbfeb293947ecee3d8469a31f
+      data/exp/umd-four-layer/execution_contract.json: 289ab61fb2eac81b2a8064ff01cad9d2946c814624f57c3c473053e4408f5571
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+    captionSourceHashes: {}
+  fig_local_road_association_estimation_support:
+    figureId: fig_local_road_association_estimation_support
+    figurePath: data/results/figures/Figure_local_road_association_estimation_support.png
+    figureCaption: Local Road Association Estimation Support
+    figurePanelCount: 1
+    figureNote: "The Appendix mesh map distinguishes estimable local fits with at least thirty pooled records, estimable fits below thirty records, and unavailable fits. Thirty records correspond to six meshes in the balanced five-period dataset, rather than thirty independent spatial units. Support colors indicate neither coefficient sign nor significance."
+    figureAim: Appendix figure documenting estimable neighborhoods, fewer-than-thirty-record support flags and unavailable
+      local fits for the same local association surface.
+    figureExplanation: 'Local Road Association Estimation Support. This independent appendix figure documents estimation
+      support for the extended geographically weighted pooled road-density coefficient surface shown in Local Road
+      Associations across Japan. The coefficient is conditional on Population, five annual UMD land-cover shares
+      and six selected static facility/accessibility controls. Water is the omitted land-cover reference. UMD classes
+      6-10 form Shrublands and Grasslands and class 15 is Barren. Constant or redundant nuisance controls are omitted
+      while retaining their column space; road and population must remain identifiable. An intercept is included;
+      no fixed effects are included. Nighttime Radiance proxies broader economic activity. The five road/light periods
+      are 2002, 2003, 2004, 2010 and 2024, with census matches 2000, 2005, 2005, 2010 and 2020. Coefficients have
+      radiance units (nW/cm2/sr) per km/km2 of road density. The 5 km fixed-distance bisquare kernel uses great-circle
+      centroid distances. Bandwidth selection used whole-mesh holdout on identical estimable validation support:
+      985 of 1,282 sampled centers, representing 75.25 percent of tile expansion weight. This is an approximate
+      optimum conditional on that support, not a verified national optimum. Final fits include the focal mesh. All
+      383,386 complete-case focal meshes appear in this figure: 357,316 estimable and 26,070 non-estimable. Gray
+      marks non-estimable fits, not zero coefficients. Pale blue denotes ocean; light gray land is display context
+      without a model estimate. Mesh rectangles are 1/120 degree latitude by 1/80 degree longitude, with no interpolation
+      or additional land mask. Southwest and Ogasawara insets use separate scales. Four original-source Minamitorishima
+      meshes lack land cover and are absent from this common estimation cohort; their source rows remain retained.
+      Of the unavailable fits, 23,837 have constant mandatory road or population terms and 2,233 have an unidentifiable
+      retained design. No local uncertainty or significance shading is provided. Associations neither identify causality
+      nor prove excessive road provision. Export is 600 dpi.
+
+      Dark teal marks 357,292 estimable focal meshes with at least thirty observation records; orange marks the
+      twenty-four estimable focal meshes below thirty records. All estimable neighborhoods, including exact zero
+      road slopes, receive an estimable support color. The threshold counts pooled observation records, not independent
+      meshes. With five records per mesh, thirty records correspond to six positive-weight meshes; it is not an
+      effective-weight sample-size threshold. Gray marks all 26,070 unavailable fits; support colors encode neither
+      road coefficient signs nor significance. Full numerical estimates are unchanged.'
+    figureSuitableSection: 'Appendix: local estimation support'
+    title: Local Road Association Estimation Support
+    scriptPath: src/analyses/figure_local_road_association_estimation_support.py
+    captionPath: data/results/figures/Figure_local_road_association_estimation_support.caption.md
+    validationPath: data/exp/figure-table-generation/local-road-association-estimation-support/validation.json
+    artifactSha256: b938d8c91dc6bc6a95a0a4b1732f471076fa0aee3cb4c096dea7d2d91043d1dd
+    sourceHashes:
+      data/exp/umd-four-layer/local-fit-5km/local_coefficients.parquet: 27d467ab5f5250b7c8c82bf88b49a64c63fc24284442fe157f5f2d65484f533b
+      data/exp/umd-four-layer/local-fit-5km/local_fit_validation.json: 5f74801f3c50be1d6fe7ab843e3e5a2949bcb17347b1a74341d434d77d4cd0ac
+      data/exp/umd-four-layer/active_local_result.json: 6921c039cde66f0dd8cccc8374c8b44ed9f3800dbfeb293947ecee3d8469a31f
+      data/exp/umd-four-layer/execution_contract.json: 289ab61fb2eac81b2a8064ff01cad9d2946c814624f57c3c473053e4408f5571
+      data/exp/umd-four-layer/inputs/model_panel.parquet: e16305c22833ba551b1222b9f28b3c1dbd13e45935fe63928aef21a797b7262c
+    captionSourceHashes: {}
+  fig_spatial_distribution_of_potential_mismatch:
+    figureId: fig_spatial_distribution_of_potential_mismatch
+    figurePath: data/results/figures/Figure_spatial_distribution_of_potential_mismatch.png
+    figureCaption: Spatial Distribution of Potential Mismatch
+    figurePanelCount: 2
+    figureNote: "Panel a maps supported high-road/low-radiance candidates, supported noncandidates and unavailable screening in 2024. Panel b shows dominant UMD land context only for candidate meshes, with other analytical meshes muted. Screening uses unchanged comparable-context peer rules and support thresholds. Candidate context counts are not within-context candidate rates; valid zero radiance and unavailable screening remain distinct. Candidates identify relative patterns rather than confirmed excessive or unused roads."
+    figureAim: Locate supported potential mismatch candidates in 2024, distinguish unsupported screening from supported
+      noncandidates, and color candidate meshes only by their UMD land context in the companion map.
+    figureExplanation: Spatial Distribution of Potential Mismatch. Panel a locates relative high-road/low-radiance
+      candidates, supported noncandidates and unavailable screening in 2024. Panel b colors only the 66,097 candidate
+      meshes by dominant UMD land context; the other 317,289 analytical meshes remain pale-gray background, including
+      both supported noncandidates and unavailable screening. The two panels retain the same complete 383,386-mesh
+      footprint. Road and light years are 2024; matched Population is from 2020. Peer groups are Region, Population
+      band (0, 1-9, 10-49, 50-199, 200-999, 1000-4999, 5000+), dominant Land Context, presence of any selected school,
+      medical, logistics or visitor/event facility, and Railway Station distance (<1 km, 1-<5 km, >=5 km). A peer
+      group is supported if it contains at least thirty distinct meshes and maximum radiance exceeds zero. A candidate
+      has positive Road Length Density strictly above its peer 75th percentile and Nighttime Radiance at or below
+      its peer 25th percentile, using linear-interpolation quartiles. Thresholds and non-land peer bands are unchanged
+      from the accepted IGBP screening; UMD dominant context and its peer quartiles are reconstructed under MILI-D-20261011-027.
+      The candidate-only thematic display is selected under MILI-D-20261011-028; no screening values or candidate
+      identities are changed. Panel b legend counts refer only to candidates, not whole-cohort land area or within-context
+      candidate rates. Barren has zero candidates because all thirty-four Barren-context meshes lack peer support;
+      this is not evidence of no potential mismatch in Barren areas. UMD shares represent Forest (classes 1-5),
+      Shrublands and Grasslands (6-10), Cropland (12), Urban (13), Water (0) and Barren (15, including permanent
+      snow/ice). Largest full-mesh share determines context; ties within 1e-12 remain distinct, and incomplete coverage
+      overrides dominance. No tied context is observed; all 104 incomplete-coverage meshes are retained. There are
+      376,219 supported meshes, 66,097 candidates (17.57% of supported meshes) and 7,167 unavailable indicators.
+      Of candidates, 64,034 (96.88%) have valid numerical zero radiance. These values are retained; they do not
+      establish zero economic activity. Nighttime Radiance proxies broader economic activity. Red candidates are
+      relative empirical patterns, not confirmed road overprovision, unused roads, causal effects or measured maintenance
+      liabilities. Screening is distinct from the GWPR coefficient surface. Dark gray in panel a indicates unsupported
+      screening; dark gray in panel b indicates fourteen candidate meshes with incomplete land-cover coverage. Pale
+      gray in panel b marks other analytical meshes without a thematic context color. Pale blue is ocean, and light
+      gray land is geographic context outside the analytical cohort. Actual third-order mesh rectangles measure
+      1/120 degree latitude by 1/80 degree longitude; no smoothing, interpolation or additional land mask is applied.
+      Southwest and Ogasawara insets use separate scales. Four original Minamitorishima meshes with unavailable
+      land cover remain outside the unchanged extended cohort; source rows are preserved. All-zero-light groups
+      and fewer-than-thirty-mesh groups are unavailable, never coded as noncandidates. Current municipal comparisons
+      use the independently validated UMD screen reconciliation with unchanged government assignments, traffic and
+      fiscal inputs; earlier IGBP municipal results remain historical provenance. Export is 600 dpi.
+    figureSuitableSection: 'Results: comparable-context potential mismatch'
+    title: Spatial Distribution of Potential Mismatch
+    scriptPath: src/analyses/figure_spatial_distribution_of_potential_mismatch.py
+    captionPath: data/results/figures/Figure_spatial_distribution_of_potential_mismatch.caption.md
+    validationPath: data/exp/figure-table-generation/spatial-distribution-of-potential-mismatch/validation.json
+    artifactSha256: d79976d2e7846172cd38a757cb71ee30a0dfe800713011da99eb44829f87e2a1
+    sourceHashes:
+      data/exp/umd-mismatch-screen/mesh_screen_2024.parquet: 1dfe7ebc63e71ea6b9c3f41d6545f9436bba85aa9bbe93a7921e8cc553bb7e87
+      data/exp/umd-mismatch-screen/validation.json: 5b5441c8243f94fd7633d1d6f17affe3d2a27d600f334bba7e223a66789f5304
+      data/exp/umd-mismatch-screen/screening_contract.json: 312609de82280438ffe7d0c94b3784c868ee55fd0593014c4211e6306957eab6
+    captionSourceHashes:
+      data/exp/umd-municipal-context/validation.json: 9027cb826920e9232f4409d18b5511e4a0bd3c415fe9847c0b7a3f75d4676344
+      data/exp/umd-municipal-context/municipal_evidence_2024.parquet: 83ec4e5a758ca81df800974e7b45bd39ded5d2ca33cb32e4d20b2ee554930c60
+  fig_potential_mismatch_by_land_context:
+    figureId: fig_potential_mismatch_by_land_context
+    figurePath: data/results/figures/Figure_potential_mismatch_by_land_context.png
+    figureCaption: Potential Mismatch by Land Context
+    figurePanelCount: 2
+    figureNote: "Panel a shows candidate percentages among supported meshes within Forest, Shrublands and Grasslands, Urban, Cropland and Water contexts. Panel b shows valid zero-radiance percentages among candidates in those contexts. Exact numerators and denominators accompany each bar. Barren and Incomplete coverage are omitted from this display only, with their source records retained. Percentages are descriptive, and zero radiance does not establish zero economic activity."
+    figureAim: Compare candidate fractions among supported meshes and valid zero-radiance fractions among candidates
+      for Forest, Shrublands and Grasslands, Urban, Cropland and Water; omit Barren and Incomplete coverage from
+      this figure only.
+    figureExplanation: Potential Mismatch by Land Context. Panel a reports candidate meshes as a percentage of supported
+      comparison meshes within each dominant UMD land context; panel b reports meshes with valid zero Nighttime
+      Radiance as a percentage of candidates in that context. Adjacent columns give each exact numerator and denominator.
+      Forest, Shrublands and Grasslands, Urban, Cropland and Water are displayed. Barren and Incomplete coverage
+      are omitted from this figure only under MILI-D-20261011-031; all source records and the complete seven-context
+      summary remain retained. Displayed within-context counts and percentages are unchanged. Percentages are descriptive;
+      no confidence interval, significance test or new model is estimated. Both panels use the same 2024 road/light
+      cross-section and matched 2020 census, with 383,386 cohort meshes, 376,219 supported comparisons and 66,097
+      candidates. There are 64,034 valid-zero-radiance candidates. Unavailable screening is excluded from the panel-a
+      denominator and remains missing in the source. Zero denominators remain unavailable, never zero percent. All
+      thirty-four Barren-context meshes lack sufficient peer support, giving zero supported and candidate meshes;
+      neither Barren percentage is estimable. Incomplete coverage includes 104 cohort meshes, sixty-five supported
+      meshes and fourteen candidates, so its percentages describe a small sample. Context colors match Spatial Distribution
+      of Potential Mismatch. The existing peer dimensions, at-least-thirty distinct-mesh and positive-maximum-radiance
+      support rule, and strict positive-road/Q75 and inclusive radiance/Q25 comparisons are unchanged under MILI-D-20261011-027.
+      These are relative mismatch patterns and source-proxy diagnostics. Valid zero radiance does not prove zero
+      economic activity, and candidates do not identify confirmed excessive or unused roads. Forest, through-route
+      and essential-access functions remain relevant. UMD context uses largest full-mesh share with incomplete coverage
+      overriding dominance; observed contexts and source zeros remain retained. Water-context meshes follow full-mesh
+      footprints and may contain land and roads. Native UMD shares retain their accepted quality and mask-water
+      handling. Export is 600 dpi.
+    figureSuitableSection: 'Results: land context and proxy information'
+    title: Potential Mismatch by Land Context
+    scriptPath: src/analyses/figure_potential_mismatch_by_land_context.py
+    captionPath: data/results/figures/Figure_potential_mismatch_by_land_context.caption.md
+    validationPath: data/exp/figure-table-generation/potential-mismatch-by-land-context/validation.json
+    artifactSha256: 23363da4f72898eab8ec021c671fc095a9c17082710a02f3c2f4ba1c20f8bb62
+    sourceHashes:
+      data/exp/umd-mismatch-screen/mesh_screen_2024.parquet: 1dfe7ebc63e71ea6b9c3f41d6545f9436bba85aa9bbe93a7921e8cc553bb7e87
+      data/exp/umd-mismatch-screen/validation.json: 5b5441c8243f94fd7633d1d6f17affe3d2a27d600f334bba7e223a66789f5304
+      data/exp/umd-mismatch-screen/land_context_summary.csv: fcf0a907f182fc17f9e3d450d697c5f94b43b94b1589bffbb0ef56a37d59a1e3
+      data/exp/umd-mismatch-screen/screening_contract.json: 312609de82280438ffe7d0c94b3784c868ee55fd0593014c4211e6306957eab6
+    captionSourceHashes: {}
+  fig_municipal_mismatch_traffic_and_fiscal_context:
+    figureId: fig_municipal_mismatch_traffic_and_fiscal_context
+    figurePath: data/results/figures/Figure_municipal_mismatch_traffic_and_fiscal_context.png
+    figureCaption: Municipal Mismatch, Traffic and Fiscal Context
+    figurePanelCount: 3
+    figureNote: "Panels a-c relate municipal potential-mismatch fractions to territorial surveyed twenty-four-hour traffic, own-government road-plus-bridge maintenance spending as a share of expenditure, and the single-year standard fiscal revenue/need ratio. Three panels occupy a two-by-two canvas with the fourth slot empty. Each reports available pair counts, Spearman and Pearson correlations, and conventional Pearson p values; dashed lines are original-scale single-predictor OLS summaries. Traffic and fiscal measures are not matched by road ownership. These cross-sectional comparisons do not measure candidate-road costs or causal fiscal effects."
+    figureAim: Describe how current UMD municipal candidate fractions relate to surveyed traffic, maintenance shares
+      of expenditure and fiscal resources in three scatter panels arranged on a two-by-two canvas with the fourth
+      slot empty; show original-scale OLS dashed lines, pairwise available counts, descriptive Spearman correlations,
+      and Pearson coefficients with conventional two-sided p values.
+    figureExplanation: Municipal Mismatch, Traffic and Fiscal Context. Each point is an individual municipal financial
+      government (city, town, village or Tokyo special ward); designated-city administrative wards are consolidated
+      to the financial parent. The horizontal axis is the percentage of assigned supported UMD comparison meshes
+      that are potential mismatch candidates. Panel a shows segment-length-weighted surveyed twenty-four-hour traffic
+      in the territory; panel b own-government road-plus-bridge maintenance spending as a percentage of total expenditure;
+      panel c the single-year standard fiscal revenue/need ratio. Panels report pairwise available counts and unadjusted
+      descriptive Spearman correlations, Pearson correlations and conventional two-sided Pearson p values for the
+      null of zero linear correlation. Pearson tests assume independent bivariate-normal pairs and are not adjusted
+      for spatial dependence or multiple comparisons; p values do not refer to Spearman coefficients. Values below
+      0.1 percent are displayed as p < 0.1%; exact computed values remain in the verification record. Small p values
+      do not establish large associations or causality. Black dashed lines show unweighted, single-predictor OLS
+      fits with an intercept on each panel's available pairs, using original outcome values. Fits span the observed
+      predictor range, without controls, confidence bands or separate fitted-line tests. The unconstrained traffic
+      and fiscal-resource lines fall below zero at the high end of candidate fractions; these segments expose the
+      limits of the linear summary and are not plausible outcome predictions. The three panels occupy a two-by-two
+      layout with the fourth slot empty. Road/light and land context use 2024, Population 2020, surveyed traffic
+      2021 and actual fiscal year 2023. Municipal mesh allocation and government consolidation are unchanged. The
+      383,386-mesh ledger retains 320 unavailable government links; 38 candidate meshes lack such links and are
+      not reassigned. There are 66,059 linked candidates from 66,097 national candidates. All source fiscal values
+      and traffic references agree with the previously verified inputs. Missing traffic stays missing, and each
+      panel uses its available outcome/predictor pairs. All axes are linear and all finite outcome values are retained.
+      Candidate and maintenance fractions are displayed as percentages, with source values unchanged. Zero maintenance
+      values and all finite extreme values remain included. No smoothing, jitter, outcome trimming or new control
+      is introduced. Contexts omitted from the previous bar figure remain part of this overall municipal aggregation.
+      Surveyed traffic primarily covers major roads and does not measure all ordinary municipal roads. Territorial
+      traffic and own-government fiscal spending are not matched by road ownership. Realized maintenance spending
+      does not measure required or deferred maintenance, nor costs attributable to flagged roads. Tokyo special
+      wards retain their distinct fiscal arrangement. These cross-sectional associations provide transport and fiscal
+      context; they do not establish road overprovision, causality or a measured fiscal effect of candidate road
+      stock. Export is 600 dpi.
+    figureSuitableSection: 'Results: municipal transport and fiscal context'
+    title: Municipal Mismatch, Traffic and Fiscal Context
+    scriptPath: src/analyses/figure_municipal_mismatch_traffic_and_fiscal_context.py
+    captionPath: data/results/figures/Figure_municipal_mismatch_traffic_and_fiscal_context.caption.md
+    validationPath: data/exp/figure-table-generation/municipal-mismatch-traffic-and-fiscal-context/validation.json
+    artifactSha256: c9813f4425ec4328b33df49be22697fe44aec38685284eabeb6e74f2e3fc489c
+    sourceHashes:
+      data/exp/umd-municipal-context/municipal_evidence_2024.parquet: 83ec4e5a758ca81df800974e7b45bd39ded5d2ca33cb32e4d20b2ee554930c60
+      data/exp/umd-municipal-context/validation.json: 9027cb826920e9232f4409d18b5511e4a0bd3c415fe9847c0b7a3f75d4676344
+      data/exp/umd-municipal-context/municipal_context_rank_correlations.csv: ef9206d858df16b88770d1a5cc8d1fb94caf7fce7cdc85a22b3ee7d79a2a6c32
+    captionSourceHashes: {}
+analysisStructureBrief:
+  overview: 'Applied transportation research describing road provision and broader economic activity across Japan:
+    a descriptive foundation, national pooled association, administrative and local spatial heterogeneity, comparable-context
+    potential mismatch, and municipal utilization/fiscal context. Potential overprovision and maintenance pressure
+    are the policy motivation, not established causal outcomes. The confirmed empirical models use an intercept
+    and original scales without fixed effects. All eight figures and five tables are accepted.'
+  levels:
+  - levelName: Descriptive foundation
+    levelAim: Establish source coverage and the spatial context of road provision and economic activity.
+    inputs:
+    - Nighttime Radiance
+    - Road Length Density
+    - Population
+    - Urban Land Cover Share
+    - Forest Land Cover Share
+    - Cropland Land Cover Share
+    - Shrublands and Grasslands
+    - Water Land Cover Share
+    - Distance to Railway Station
+    - Distance to Passenger Airport
+    - School Facility Count
+    - Medical Facility Count
+    - Logistics Facility Count
+    - Visitor and Event Facility Count
+    - Barren
+    - Potential Mismatch Candidate
+    - Land Context
+    - Candidate Fraction of Supported Meshes
+    - Length Weighted 24h Volume
+    - Maintenance Share of Expenditure
+    - Maintenance Share of Standard Fiscal Scale
+    - Single Year Fiscal Revenue Need Ratio
+    - Region
+    - Prefecture
+    modelOrMethod: 'Compute equal-weight mesh means for the three core variables:
+
+
+      \[
+
+      \overline V_i=\frac{1}{5}\sum_{t\in\mathcal T}V_{it}.
+
+      \]
+
+
+      Here \(i\) indexes meshes, \(\mathcal T\) the five road/light periods, \(t\) an observed period, \(V_{it}\)
+      Road Length Density, matched Population or Nighttime Radiance, and \(\overline V_i\) its five-observation
+      mean. Use the census matches in Section 5. These are observation means, not continuous annual averages or
+      regression transformations. Facilities use selected static snapshots. The facility panel displays accepted
+      source-location points for School Facility Count, Medical Facility Count, Logistics Facility Count and Visitor
+      and Event Facility Count, with categories and source years distinguished; it does not create a facility total.
+
+
+      Analytical Variables and Sample Coverage summarizes twenty-two confirmed substantive variables. Use panel
+      records for time-varying variables, distinct meshes for static facilities and screening, and governments for
+      municipal measures. Report units, source dates, valid counts, missing percentages and numerical moments. Land
+      Context receives category counts and proportions. Spatial Distribution of Key Variables uses actual mesh footprints
+      and three means; the fourth panel shows the selected source-location points.'
+    outputs:
+    - Spatial Distribution of Key Variables
+    - Analytical Variables and Sample Coverage
+    interpretation: Equal-weight five-observation mesh means show spatial concentrations. These are not averages
+      of every intervening year. Static facilities use one selected snapshot each. Valid counts depend on statistical
+      unit. Coverage does not represent every Japanese land mesh.
+    evidenceSupportStatus: Descriptive foundation completed and accepted; source comparability remains limited.
+    scriptPaths:
+    - src/analyses/figure_spatial_distribution_of_key_variables.py
+    - src/analyses/table_analytical_variables_and_sample_coverage.py
+  - levelName: National conditional association
+    levelAim: Assess the national road-economy association with and without observed context controls.
+    inputs: &id001
+    - Nighttime Radiance
+    - Road Length Density
+    - Population
+    - Urban Land Cover Share
+    - Forest Land Cover Share
+    - Cropland Land Cover Share
+    - Shrublands and Grasslands
+    - Barren
+    - Water Land Cover Share
+    - Distance to Railway Station
+    - Distance to Passenger Airport
+    - School Facility Count
+    - Medical Facility Count
+    - Logistics Facility Count
+    - Visitor and Event Facility Count
+    modelOrMethod: 'Use the combined baseline and extension specification:
+
+
+      \[
+
+      R_{it}=\beta_{0,a,b}+\beta_{D,a,b}D_{it}+\beta_{P,a,b}P_{it}
+
+      +b\left[\sum_{j=1}^{5}\delta_{j,a,b}\ell_{itj}
+
+      +\sum_{m=1}^{6}\eta_{m,a,b}Z_{im}^{(s_m)}\right]+e_{it,a,b}.
+
+      \]
+
+
+      Here \(R_{it}\), \(D_{it}\) and \(P_{it}\) are Nighttime Radiance, Road Length Density and Population; \(a\)
+      indexes the national sample, Region or Prefecture containing mesh \(i\); \(b\) is zero for baseline and one
+      for extension; \(\beta_{0,a,b}\) is the intercept, \(\beta_{D,a,b}\) and \(\beta_{P,a,b}\) the core slopes,
+      and \(e_{it,a,b}\) the residual. The shares \(\ell_{itj}\), indexed by \(j\), are Urban Land Cover Share,
+      Forest Land Cover Share, Cropland Land Cover Share, Shrublands and Grasslands and Barren; \(\delta_{j,a,b}\)
+      are their slopes. Water Land Cover Share is the omitted reference subject to partial coverage. The controls
+      \(Z_{im}^{(s_m)}\), indexed by \(m\), are Distance to Railway Station, Distance to Passenger Airport, School
+      Facility Count, Medical Facility Count, Logistics Facility Count and Visitor and Event Facility Count; \(s_m\)
+      is the source edition and \(\eta_{m,a,b}\) its slope. In the baseline the bracketed terms are absent and their
+      slopes unestimated. Earlier mesh and time definitions apply.
+
+
+      Estimate national, regional and prefecture models independently on identical area-specific samples. Apply
+      mesh-clustered CR1:
+
+
+      \[
+
+      c_{a,b}=\frac{G_a}{G_a-1}\frac{N_a-1}{N_a-K_{a,b}}.
+
+      \]
+
+
+      Here \(c_{a,b}\) is the covariance correction, \(G_a\) mesh count, \(N_a\) record count and \(K_{a,b}\) the
+      actual retained parameter count including intercept: three in the baseline and at most fourteen in the extension.
+      Cluster all five mesh records together, use normal 95 percent intervals and preserve unidentified core-model
+      vectors. Omitted constant or redundant control slopes and their intervals remain unavailable.
+
+
+      Report centered pooled fit:
+
+
+      \[
+
+      R_{a,b}^2=1-\frac{\sum_{i\in\mathcal I_a,t\in\mathcal T}\widehat e_{it,a,b}^2}
+
+      {\sum_{i\in\mathcal I_a,t\in\mathcal T}(R_{it}-\overline R_a)^2}.
+
+      \]
+
+
+      Here \(\mathcal I_a\) is the area''s mesh set, \(\widehat e_{it,a,b}\) the fitted residual, \(\overline R_a\)
+      its mean radiance and \(R_{a,b}^2\) joint fit. The comparison shares the denominator.
+
+
+      Outputs are National Road Associations, Regional Road Association Comparison, Prefecture Road Association
+      Comparison and Regional Road Associations and Prefecture Road Associations. The two administrative figures
+      pair baseline/extended forest estimates with maps of the extended road coefficient using the frozen administrative
+      areas. Use one zero-centered diverging map scale across the two figures and distinguish unavailable fits from
+      zero. Colors display area estimates, not local coefficients or significance. Administrative tables have six
+      columns, combine coefficients and intervals, and state five-times-mesh record counts in notes. Attempt all
+      forty-seven Prefectures, including Tokyo and Nara, under the confirmed constant/redundant-control rule.
+
+
+      When an additional control is redundant, retained nuisance coefficients are parameters of the selected basis
+      and do not all have a common water-reference interpretation. Roads and population are reported only when uniquely
+      identifiable against the complete nuisance span.'
+    outputs:
+    - National Road Associations
+    interpretation: On the identical 383,386-mesh cohort, the road slope changes from 0.226693 in the baseline to
+      0.019468 in the extension. Ordinary R-squared is 0.663260 and 0.756164, respectively; this is joint model
+      fit, not the contribution of roads alone. Adding observed context changes the conditional association but
+      does not establish mediation, causality or road excess.
+    evidenceSupportStatus: Supporting Point 1 supported descriptively, with proxy and source-comparability limits.
+    scriptPaths:
+    - src/analyses/run_umd_four_layers.py
+    - src/analyses/gwpr_umd_identified.py
+    - src/analyses/table_national_road_associations.py
+  - levelName: Administrative spatial heterogeneity
+    levelAim: Describe how area-specific conditional road associations vary across Japan.
+    inputs:
+    - Nighttime Radiance
+    - Road Length Density
+    - Population
+    - Urban Land Cover Share
+    - Forest Land Cover Share
+    - Cropland Land Cover Share
+    - Shrublands and Grasslands
+    - Barren
+    - Water Land Cover Share
+    - Distance to Railway Station
+    - Distance to Passenger Airport
+    - School Facility Count
+    - Medical Facility Count
+    - Logistics Facility Count
+    - Visitor and Event Facility Count
+    - Region
+    - Prefecture
+    modelOrMethod: 'Use the combined baseline and extension specification:
+
+
+      \[
+
+      R_{it}=\beta_{0,a,b}+\beta_{D,a,b}D_{it}+\beta_{P,a,b}P_{it}
+
+      +b\left[\sum_{j=1}^{5}\delta_{j,a,b}\ell_{itj}
+
+      +\sum_{m=1}^{6}\eta_{m,a,b}Z_{im}^{(s_m)}\right]+e_{it,a,b}.
+
+      \]
+
+
+      Here \(R_{it}\), \(D_{it}\) and \(P_{it}\) are Nighttime Radiance, Road Length Density and Population; \(a\)
+      indexes the national sample, Region or Prefecture containing mesh \(i\); \(b\) is zero for baseline and one
+      for extension; \(\beta_{0,a,b}\) is the intercept, \(\beta_{D,a,b}\) and \(\beta_{P,a,b}\) the core slopes,
+      and \(e_{it,a,b}\) the residual. The shares \(\ell_{itj}\), indexed by \(j\), are Urban Land Cover Share,
+      Forest Land Cover Share, Cropland Land Cover Share, Shrublands and Grasslands and Barren; \(\delta_{j,a,b}\)
+      are their slopes. Water Land Cover Share is the omitted reference subject to partial coverage. The controls
+      \(Z_{im}^{(s_m)}\), indexed by \(m\), are Distance to Railway Station, Distance to Passenger Airport, School
+      Facility Count, Medical Facility Count, Logistics Facility Count and Visitor and Event Facility Count; \(s_m\)
+      is the source edition and \(\eta_{m,a,b}\) its slope. In the baseline the bracketed terms are absent and their
+      slopes unestimated. Earlier mesh and time definitions apply.
+
+
+      Estimate national, regional and prefecture models independently on identical area-specific samples. Apply
+      mesh-clustered CR1:
+
+
+      \[
+
+      c_{a,b}=\frac{G_a}{G_a-1}\frac{N_a-1}{N_a-K_{a,b}}.
+
+      \]
+
+
+      Here \(c_{a,b}\) is the covariance correction, \(G_a\) mesh count, \(N_a\) record count and \(K_{a,b}\) the
+      actual retained parameter count including intercept: three in the baseline and at most fourteen in the extension.
+      Cluster all five mesh records together, use normal 95 percent intervals and preserve unidentified core-model
+      vectors. Omitted constant or redundant control slopes and their intervals remain unavailable.
+
+
+      Report centered pooled fit:
+
+
+      \[
+
+      R_{a,b}^2=1-\frac{\sum_{i\in\mathcal I_a,t\in\mathcal T}\widehat e_{it,a,b}^2}
+
+      {\sum_{i\in\mathcal I_a,t\in\mathcal T}(R_{it}-\overline R_a)^2}.
+
+      \]
+
+
+      Here \(\mathcal I_a\) is the area''s mesh set, \(\widehat e_{it,a,b}\) the fitted residual, \(\overline R_a\)
+      its mean radiance and \(R_{a,b}^2\) joint fit. The comparison shares the denominator.
+
+
+      Outputs are National Road Associations, Regional Road Association Comparison, Prefecture Road Association
+      Comparison and Regional Road Associations and Prefecture Road Associations. The two administrative figures
+      pair baseline/extended forest estimates with maps of the extended road coefficient using the frozen administrative
+      areas. Use one zero-centered diverging map scale across the two figures and distinguish unavailable fits from
+      zero. Colors display area estimates, not local coefficients or significance. Administrative tables have six
+      columns, combine coefficients and intervals, and state five-times-mesh record counts in notes. Attempt all
+      forty-seven Prefectures, including Tokyo and Nara, under the confirmed constant/redundant-control rule.
+
+
+      When an additional control is redundant, retained nuisance coefficients are parameters of the selected basis
+      and do not all have a common water-reference interpretation. Roads and population are reported only when uniquely
+      identifiable against the complete nuisance span.'
+    outputs:
+    - Regional Road Associations
+    - Prefecture Road Associations
+    - Regional Road Association Comparison
+    - Prefecture Road Association Comparison
+    interpretation: Separate same-sample fits cover nine transportation-statistics regions and forty-seven prefectures.
+      Extended coefficients vary in sign and magnitude. Individual clustered intervals are not formal tests of between-area
+      differences. Nuisance-basis omissions preserve mandatory core identification but can change interpretation
+      of retained control slopes.
+    evidenceSupportStatus: 'Supporting Point 2: descriptive geographic variation supported; no formal coefficient-difference
+      test.'
+    scriptPaths:
+    - src/analyses/run_umd_four_layers.py
+    - src/analyses/administrative_association_map_helpers.py
+    - src/analyses/figure_regional_road_associations.py
+    - src/analyses/figure_prefecture_road_associations.py
+    - src/analyses/table_regional_road_association_comparison.py
+    - src/analyses/table_prefecture_road_association_comparison.py
+  - levelName: Local spatial heterogeneity
+    levelAim: Describe association variation below administrative averages and show where fits are supported.
+    inputs: *id001
+    modelOrMethod: 'Let \(\mathbf x_{it}\) contain the intercept and thirteen extended predictors. Estimate:
+
+
+      \[
+
+      \widehat{\boldsymbol\vartheta}_{A(s,h)}
+
+      =\arg\min_{\boldsymbol\vartheta_{A(s,h)}}\sum_{i,t}w_i(s,h)
+
+      [R_{it}-\mathbf x_{it,A(s,h)}^\top\boldsymbol\vartheta_{A(s,h)}]^2.
+
+      \]
+
+
+      Here \(s\) is the focal centroid, \(h\) bandwidth in kilometres, \(A(s,h)\) the retained parameter set, \(\boldsymbol\vartheta_{A(s,h)}\)
+      its coefficient vector, the hat its estimate, \(\mathbf x_{it,A(s,h)}\) the retained design, \(w_i(s,h)\)
+      mesh weights and \(\top\) transpose. Retain intercept, mandatory roads and population, and varying added controls.
+
+
+      Use bisquare weights:
+
+
+      \[
+
+      w_i(s,h)=[1-(d(s,s_i)/h)^2]^2\mathbf1\{d(s,s_i)<h\}.
+
+      \]
+
+
+      Here \(s_i\) is the mesh centroid, \(d(s,s_i)\) great-circle distance using radius 6371.0088 kilometres and
+      \(\mathbf1\) an indicator. All five records share mesh weights. Final fits include their focal mesh.
+
+
+      An added control is constant when its range is no greater than \(\tau\) times the larger of one and its maximum
+      absolute training value; \(\tau=10^{-12}\) is the existing tolerance. Keep its slope unavailable and absorb
+      its constant contribution into the intercept. Build a deterministic independent nuisance basis in the listed
+      control order using twice-reorthogonalized residuals. A normalized residual norm at most \(10^{-10}\) denotes
+      redundant information. Keep omitted slopes unavailable. Constant mandatory predictors or a rank-deficient
+      retained design leave fits unavailable. This preserves the nuisance span rather than resolving core/control
+      aliasing by dropping a substantive control. Numerical centering and scaling preserve original units and do
+      not introduce fixed effects. The smallest eigenvalue of the centered column-normalized design Gram matrix
+      must exceed \(10^{-12}\).
+
+
+      Repeat the integer search over three to fifty kilometres, holding out all five records of each validation
+      mesh and comparing:
+
+
+      \[
+
+      \operatorname{CV}(h)=
+
+      \frac{\sum_{q\in\mathcal V}\omega_q[\frac15\sum_{t\in\mathcal T}
+
+      (R_{qt}-\widehat R_{qt}^{(-q,h)})^2]}
+
+      {\sum_{q\in\mathcal V}\omega_q}.
+
+      \]
+
+
+      Here \(q\) indexes validation meshes, \(\mathcal V\) the identical predictable and estimable center set, \(\omega_q\)
+      tile-expansion weights, \(\widehat R_{qt}^{(-q,h)}\) held-out prediction excluding all records of mesh \(q\),
+      and \(\operatorname{CV}(h)\) weighted radiance-level mean squared error. A held-out control differing from
+      an omitted training constant or affine redundancy relation leaves prediction unavailable. Use the same predictable
+      center set for all radii, retain tile-expansion weights and report the fraction of validation support represented.
+      Changing-support scores do not rank radii.
+
+
+      The completed UMD search evaluates forty-eight integer radii using 985 identical predictable validation centers,
+      representing 75.252636 percent of tile-expansion weight. The conditional minimum is 5 kilometres with radiance-level
+      RMSE 1.774688; this is not a proven national optimum. The full UMD surface contains 357,316 estimable and
+      26,070 unavailable focal vectors. Earlier IGBP estimates retain their source identity. Retain all 383,386
+      focal meshes, including failures and fewer-than-thirty-record support flags; report positive-weight and effective-weight
+      meshes separately. Local Road Associations across Japan shows the coefficient surface in the main text. Local
+      Road Association Estimation Support separately documents model availability and small-neighborhood flags in
+      the appendix. Both use the same unchanged local results. No local significance inference is selected. Local
+      training fit differs from national pooled fit and validation error.'
+    outputs:
+    - Local Road Associations across Japan
+    - Local Road Association Estimation Support
+    interpretation: Fixed-distance bisquare geographically weighted pooled regression uses five records per mesh
+      and no fixed effects. The 3-50 km grouped holdout search selects 5 km on 985 common predictable centers, about
+      75.25 percent of expansion weight; this is not a proven national optimum. The surface retains 357,316 estimable
+      and 26,070 unavailable meshes. Thirty records are six meshes, not thirty independent spatial units. Extreme
+      estimates and display saturation remain disclosed. No local coefficient uncertainty or significance map exists.
+    evidenceSupportStatus: Supporting Point 2 supported descriptively on estimable neighborhoods; local precision
+      and significance unestablished.
+    scriptPaths:
+    - src/analyses/run_umd_four_layers.py
+    - src/analyses/gwpr_umd_identified.py
+    - src/analyses/gwpr_pooled.py
+    - src/analyses/gwpr_twoways.py
+    - src/analyses/figure_local_road_associations_across_japan.py
+    - src/analyses/figure_local_road_association_estimation_support.py
+  - levelName: Comparable-context potential mismatch
+    levelAim: Locate relative high-road/low-radiance patterns and distinguish their land backgrounds.
+    inputs:
+    - Potential Mismatch Candidate
+    - Land Context
+    - Road Length Density
+    - Nighttime Radiance
+    - Population
+    - Region
+    - Distance to Railway Station
+    - School Facility Count
+    - Medical Facility Count
+    - Logistics Facility Count
+    - Visitor and Event Facility Count
+    modelOrMethod: 'Reconstruct UMD peers defined by Region; Population bands zero, 1-9, 10-49, 50-199, 200-999,
+      1000-4999 and at least 5000; Land Context; presence of any four selected facility totals; and Distance to
+      Railway Station bands below one, one to below five, and at least five kilometres. Retain incomplete coverage
+      and any tied dominance in Land Context. Distance to Passenger Airport is not matched. Do not reoptimize peer
+      rules.
+
+
+      Use:
+
+
+      \[
+
+      S_i=\mathbf1\{n_{g(i)}\geq30\}\mathbf1\{\max_{j:g(j)=g(i)}R_j>0\},
+
+      \qquad
+
+      C_i=\begin{cases}
+
+      \mathbf1\{D_i>0\}\mathbf1\{D_i>Q_{D,g(i)}(0.75)\}
+
+      \mathbf1\{R_i\leq Q_{R,g(i)}(0.25)\},&S_i=1,\\
+
+      \text{undefined},&S_i=0.
+
+      \end{cases}
+
+      \]
+
+
+      Here \(g(i)\) is the peer stratum, \(n_{g(i)}\) its distinct-mesh count, \(S_i\) support, \(C_i\) Potential
+      Mismatch Candidate, and \(D_i\) and \(R_i\) latest road density and radiance. The quantities \(Q_{D,g(i)}(0.75)\)
+      and \(Q_{R,g(i)}(0.25)\) are empirical quartiles; \(j\) indexes peers in the maximum. Retain existing linear-interpolation
+      quartiles, strict road and inclusive light comparisons. Undefined status stays missing. Positive-constant
+      and zero lower-quartile groups receive diagnostics without new exclusions.
+
+
+      The validated UMD screen has 376,219 supported meshes, 66,097 candidates and 7,167 unavailable indicators.
+      All 1,499 peer groups pass independent checks. There are 172 meshes in all-zero-radiance groups, all already
+      below thirty peers. Spatial Distribution of Potential Mismatch maps candidate/support states in panel a and
+      UMD Land Context only for candidate meshes in panel b. Other analytical meshes remain muted background in
+      panel b; all observed contexts remain in its legend with candidate counts, including zero counts. Potential
+      Mismatch by Land Context shows candidate percentages among supported meshes and source-zero-radiance percentages
+      among candidates with both denominators for five displayed contexts: Forest, Shrublands and Grasslands, Urban,
+      Cropland and Water. Barren and Incomplete coverage are omitted from this figure only under MILI-D-20261011-031;
+      their records and the complete summary remain retained. Retain seven observed UMD contexts: Urban, Forest,
+      Cropland, Shrublands and Grasslands, Water, Barren and Incomplete coverage. Tied dominance remains a separate
+      context if observed. These are relative patterns, not measured economic inactivity or excessive length.'
+    outputs:
+    - Spatial Distribution of Potential Mismatch
+    - Potential Mismatch by Land Context
+    interpretation: Of 376,219 supported comparisons, 66,097 are relative candidates. The 7,167 unsupported indicators
+      remain missing. Candidate membership uses peer quartiles, not negative GWPR slopes. 64,034 candidates have
+      valid numerical zero radiance, which does not establish economic inactivity. Five contexts are displayed in
+      the bar figure; Barren and Incomplete coverage remain in data and the complete mesh map. Negative slopes or
+      candidate membership do not identify inefficient provision.
+    evidenceSupportStatus: 'Supporting Point 2: relative mismatch and context differences described; normative excess-road
+      claims untested.'
+    scriptPaths:
+    - src/preprocessing/preprocess_umd_mismatch_context.py
+    - src/analyses/run_umd_mismatch_screen.py
+    - src/analyses/figure_spatial_distribution_of_potential_mismatch.py
+    - src/analyses/figure_potential_mismatch_by_land_context.py
+  - levelName: Municipal transport and fiscal context
+    levelAim: Relate candidate fractions to observed utilization and own-government fiscal context.
+    inputs:
+    - Candidate Fraction of Supported Meshes
+    - Length Weighted 24h Volume
+    - Maintenance Share of Expenditure
+    - Maintenance Share of Standard Fiscal Scale
+    - Single Year Fiscal Revenue Need Ratio
+    - Land Context
+    modelOrMethod: 'For overall and context-specific scope use:
+
+
+      \[
+
+      q_{u,c}=\frac{\sum_{i\in\mathcal I_{u,c}:S_i=1}C_i}
+
+      {\sum_{i\in\mathcal I_{u,c}}S_i}.
+
+      \]
+
+
+      Here \(u\) indexes governments, \(c\) overall scope or Land Context, \(\mathcal I_{u,c}\) assigned meshes
+      and \(q_{u,c}\) Candidate Fraction of Supported Meshes. Prior support definitions apply; zero supported denominators
+      stay unavailable.
+
+
+      Retain:
+
+
+      \[
+
+      v_u=\frac{\sum_{k\in\mathcal K_u}l_k t_k}{\sum_{k\in\mathcal K_u}l_k},
+
+      \qquad b_u^E=m_u/e_u,\qquad b_u^S=m_u/z_u,\qquad f_u=r_u/n_u.
+
+      \]
+
+
+      Here \(\mathcal K_u\) contains territory-coded segments with positive source length and available daily traffic;
+      \(k\) indexes segments, \(l_k\) length, \(t_k\) published twenty-four-hour volume and \(v_u\) Length Weighted
+      24h Volume. The amounts \(m_u\), \(e_u\), \(z_u\), \(r_u\) and \(n_u\) denote own-government road-plus-bridge
+      maintenance, total expenditure, standard fiscal scale, standard fiscal revenue and standard fiscal need in
+      actual FY2023, in thousand yen. The ratios \(b_u^E\), \(b_u^S\) and \(f_u\) are Maintenance Share of Expenditure,
+      Maintenance Share of Standard Fiscal Scale and Single Year Fiscal Revenue Need Ratio. Empty or zero denominators
+      stay missing. Source amounts explain existing constructions rather than add controls.
+
+
+      For each outcome compute:
+
+
+      \[
+
+      \rho_{c,o}=\operatorname{Corr}_{u\in\mathcal U_{c,o}}
+
+      (\operatorname{rank}(q_{u,c}),\operatorname{rank}(Y_{u,o})).
+
+      \]
+
+
+      Here \(o\) selects \(v_u\), \(b_u^E\), \(b_u^S\) or \(f_u\), \(Y_{u,o}\) is that whole-government outcome,
+      \(\mathcal U_{c,o}\) the available pair set and \(\rho_{c,o}\) its Spearman correlation using average-tie
+      ranks. Report pair counts: overall traffic 1,734, fiscal outcomes 1,741, and varying context counts. The user
+      subsequently selects conventional Pearson p values for the three overall scatter panels; the rank-correlation
+      table remains descriptive. No temporal replication is selected.
+
+
+      For the three overall scatter outcomes, compute Pearson correlation and its conventional two-sided p value
+      on the same original-scale available pairs:
+
+
+      \[
+
+      r_o=\operatorname{Corr}_{u\in\mathcal U_{\mathrm{all},o}}(q_{u,\mathrm{all}},Y_{u,o}),
+
+      \qquad t_o=r_o\sqrt{\frac{N_o-2}{1-r_o^2}},
+
+      \qquad p_o=2\Pr\left(T_{N_o-2}\geq |t_o|\right).
+
+      \]
+
+
+      Here \(r_o\) is the Pearson coefficient, \(N_o\) the available pair count, \(t_o\) the zero-correlation test
+      statistic, \(T_{N_o-2}\) a Student t reference variable with \(N_o-2\) degrees of freedom and \(p_o\) the
+      two-sided p value. Previously defined outcomes and available pairs apply. The test assumes independent bivariate-normal
+      observations, uses no spatial or multiple-comparison correction and does not test the Spearman coefficient.
+      Report the Pearson coefficient beside its p value; display values with \(p_o<0.001\) as "p < 0.1%" and retain
+      exact computed values in the verification record. Treat these as conventional reference tests rather than
+      evidence of a causal effect or spatially adjusted uncertainty.
+
+
+      For the three overall municipal scatter panels, fit the original-scale descriptive line:
+
+
+      \[
+
+      (\widehat{a}_o,\widehat{d}_o)=\operatorname*{argmin}_{a_o,d_o}
+
+      \sum_{u\in\mathcal U_{\mathrm{all},o}}
+
+      \left(Y_{u,o}-a_o-d_o q_{u,\mathrm{all}}\right)^2,
+
+      \qquad \widehat{Y}_{u,o}=\widehat{a}_o+\widehat{d}_o q_{u,\mathrm{all}}.
+
+      \]
+
+
+      Here \(a_o\) and \(d_o\) are the outcome-specific intercept and slope, and hats denote their OLS estimates.
+      Reuse the available pair set and previously defined outcomes, selecting only \(v_u\), \(b_u^E\) and \(f_u\)
+      for this figure. All fits use unweighted individual governments and original values without a logarithm. Display
+      candidate fractions and maintenance shares as percentages; this changes display units only. Draw dashed fitted
+      lines over the observed predictor range, retain all finite observations and use linear axes. These lines summarize
+      unconditional linear association; they add no controls, confidence bands or causal interpretation. The separately
+      displayed p values concern Pearson zero correlation, not the Spearman coefficient. Unconstrained lines can
+      cross below zero within the observed predictor range; retain those segments transparently as a limitation
+      of the linear summary, rather than interpret them as plausible outcome predictions.
+
+
+      The candidate fractions have been reconciled to the validated UMD screen using the accepted jurisdiction ledger
+      and unchanged existing outcomes. Historical IGBP results remain provenance. All 1,741 government counts and
+      thirty-two overall/context outcome correlations pass independent checks; unavailable screening and zero supported
+      denominators remain missing. Municipal Mismatch, Traffic and Fiscal Context plots overall fractions against
+      traffic, maintenance/expenditure and fiscal revenue/need. Municipal Mismatch, Traffic and Fiscal Correlations
+      includes overall plus seven contexts, four outcomes and paired counts. Context-specific fractions remain paired
+      with whole-government outcomes.'
+    outputs:
+    - Municipal Mismatch, Traffic and Fiscal Context
+    - Municipal Mismatch, Traffic and Fiscal Correlations
+    interpretation: Overall Spearman correlations are -0.591235 with surveyed traffic (1,734 pairs), +0.268509 with
+      maintenance/expenditure, +0.279835 with maintenance/fiscal scale and -0.484100 with standard revenue/need
+      (1,741 fiscal pairs). Urban-context patterns are weak and differ in sign; Barren fractions are unavailable
+      and Incomplete coverage has small pair counts. Context fractions pair with whole-government outcomes. Pearson
+      p values use a conventional independent-observation reference; OLS dashed lines are unconditional summaries
+      and can cross below zero. Noncontemporaneous territorial traffic and realized own-government spending do not
+      measure flagged-road maintenance costs, ownership-matched liabilities or causal fiscal pressure.
+    evidenceSupportStatus: Supporting Point 3 partially supported as descriptive context; uniform mechanisms and
+      excess-road fiscal effects untested.
+    scriptPaths:
+    - src/preprocessing/construct_municipality_trial_geography.py
+    - src/preprocessing/prepare_municipality_trial_inputs.py
+    - src/analyses/reconcile_umd_municipal_context.py
+    - src/analyses/figure_municipal_mismatch_traffic_and_fiscal_context.py
+    - src/analyses/table_municipal_mismatch_traffic_and_fiscal_correlations.py
+researchContract:
+  centralResearchQuestion: How is road-network provision associated with economic activity across Japan, how does
+    this relationship vary spatially, and how do potential mismatch patterns relate to observed traffic utilization
+    and municipal fiscal context?
+  researchType: applied
+  inferenceTarget: Association and spatial heterogeneity; causal identification outside scope.
+  unresolvedWritingTasks:
+  - Establish the literature-based novelty claim and verify manuscript citations before submission.
+  - Resolve target journal selection and manuscript requirements during the writing stage.
+handoffProvenance:
+  anasopSha256: 6edb0bd98a7a150d82c7dbd3447cc177b2971de2bdd0f059d8804a1992bf132e
+  outputManifestPath: data/exp/output-handoff-reconciliation/current_output_manifest.json
+  issuesPath: docs/issues.md
+  activeSubstantiveVariables: 22
+  geographicStrataVariables: 2
+  historicalEvidencePolicy: Earlier FE, IGBP, core-only and historical baseline outputs are outside the active thirteen-output
+    dictionary.
+  preprocessingDecisionPaths:
+  - data/exp/data-preprocessing/decisions.json
+  - data/exp/data-preprocessing/national/decisions.json
+  - data/exp/data-preprocessing/static-facilities/decisions.json
+  - data/exp/data-preprocessing/modis-umd/decisions.json
+  - data/exp/data-preprocessing/municipality-mismatch-trial/decisions.json
